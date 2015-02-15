@@ -20,11 +20,6 @@ public class GreetingServer implements Runnable {
 				Socket server = serverSocket.accept();
 				DataInputStream in = new DataInputStream(
 						server.getInputStream());
-				if (in.read() == -1) {
-					server.close();
-					serverSocket.close();
-					continue;
-				}
 				System.out.println(in.readUTF());
 				server.close();
 				serverSocket.close();
