@@ -4,25 +4,24 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Scanner;
 
-import org.apache.log4j.Logger;
+public class GreetingServer implements Runnable {
 
-public class GreetingServer {
+	private final int port;
 
-	private static Logger log = Logger
-			.getLogger(GreetingServer.class.getName());
+	// private static Logger log = Logger
+	// .getLogger(GreetingServer.class.getName());
 
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		System.out.print("Please Enter Listening Port: ");
-		int port = scanner.nextInt();
-		scanner.close();
+	public GreetingServer(int port) {
+		this.port = port;
+	}
 
+	public void run() {
 		while (true) {
 			try {
 				ServerSocket serverSocket = new ServerSocket(port);
-				log.info("info Listening on " + serverSocket.getLocalSocketAddress());
+				// log.info("info Listening on "
+				// + serverSocket.getLocalSocketAddress());
 				Socket server = serverSocket.accept();
 				DataInputStream in = new DataInputStream(
 						server.getInputStream());
@@ -34,5 +33,9 @@ public class GreetingServer {
 				break;
 			}
 		}
+	}
+
+	public void start() {
+		new Thread(this).start();
 	}
 }
