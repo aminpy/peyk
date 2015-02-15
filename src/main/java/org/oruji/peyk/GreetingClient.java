@@ -1,37 +1,45 @@
 package org.oruji.peyk;
 
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 public class GreetingClient {
 	public static void main(String[] args) {
-		String server = "localhost";
-		int port = 8180;
-		System.out.println("Connecting to " + server + ":" + port);
 
-		try {
-			Socket client = new Socket(server, port);
-			System.out
-					.println("connected to" + client.getRemoteSocketAddress());
+		Scanner scanner = new Scanner(System.in);
+		System.out.print("Please Enter Port: ");
+		int port = scanner.nextInt();
+		System.out.print("Please Enter Host: ");
+		String server = scanner.next();
 
-			OutputStream outToServer = client.getOutputStream();
-			DataOutputStream out = new DataOutputStream(outToServer);
+		Scanner scanIn = null;
 
-			out.writeUTF("Hello From: " + client.getLocalSocketAddress());
-			InputStream inFromServer = client.getInputStream();
-			DataInputStream in = new DataInputStream(inFromServer);
-			System.out.println("Server says" + in.readUTF());
-			client.close();
+		while (true) {
+			try {
+				Socket client = new Socket(server, port);
 
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+				OutputStream outToServer = client.getOutputStream();
+				DataOutputStream out = new DataOutputStream(outToServer);
+
+				scanIn = new Scanner(System.in);
+				String inputString;
+				inputString = scanIn.nextLine();
+				out.writeUTF(inputString);
+
+				client.close();
+
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+				break;
+			} catch (IOException e) {
+				e.printStackTrace();
+				break;
+			}
 		}
+		scanIn.close();
 	}
 }
