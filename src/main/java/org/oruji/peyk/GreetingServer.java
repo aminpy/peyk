@@ -9,9 +9,6 @@ public class GreetingServer implements Runnable {
 
 	private final int port;
 
-	// private static Logger log = Logger
-	// .getLogger(GreetingServer.class.getName());
-
 	public GreetingServer(int port) {
 		this.port = port;
 	}
@@ -20,11 +17,14 @@ public class GreetingServer implements Runnable {
 		while (true) {
 			try {
 				ServerSocket serverSocket = new ServerSocket(port);
-				// log.info("info Listening on "
-				// + serverSocket.getLocalSocketAddress());
 				Socket server = serverSocket.accept();
 				DataInputStream in = new DataInputStream(
 						server.getInputStream());
+				if (in.read() == -1) {
+					server.close();
+					serverSocket.close();
+					continue;
+				}
 				System.out.println(in.readUTF());
 				server.close();
 				serverSocket.close();
