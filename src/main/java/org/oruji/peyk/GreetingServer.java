@@ -6,7 +6,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 public class GreetingServer {
+
+	private static Logger log = Logger
+			.getLogger(GreetingServer.class.getName());
+
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		System.out.print("Please Enter Listening Port: ");
@@ -16,6 +22,7 @@ public class GreetingServer {
 		while (true) {
 			try {
 				ServerSocket serverSocket = new ServerSocket(port);
+				log.info("info Listening on " + serverSocket.getLocalSocketAddress());
 				Socket server = serverSocket.accept();
 				DataInputStream in = new DataInputStream(
 						server.getInputStream());
