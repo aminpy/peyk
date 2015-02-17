@@ -7,8 +7,12 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import org.apache.log4j.Logger;
+
 public class GreetingClient implements Runnable {
 
+	private static Logger log = Logger
+			.getLogger(GreetingClient.class.getName());
 	private final String host;
 	private final int port;
 
@@ -20,6 +24,7 @@ public class GreetingClient implements Runnable {
 	public void run() {
 		Scanner scanIn = null;
 
+		String inputString = null;
 		while (true) {
 			try {
 				Socket client = new Socket(host, port);
@@ -28,18 +33,19 @@ public class GreetingClient implements Runnable {
 				DataOutputStream out = new DataOutputStream(outToServer);
 
 				scanIn = new Scanner(System.in);
-				String inputString;
-				inputString = scanIn.nextLine();
+				if (inputString == null)
+					inputString = scanIn.nextLine();
 				out.writeUTF(inputString);
 
 				client.close();
+				inputString = null;
 
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 				break;
 			} catch (IOException e) {
-				e.printStackTrace();
-				break;
+//				log.error(e.getMessage());
+				continue;
 			}
 		}
 		scanIn.close();
