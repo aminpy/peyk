@@ -7,16 +7,17 @@ import java.net.Socket;
 
 public class GreetingServer implements Runnable {
 
-	private PeykUser user;
+	private int port;
 
-	public GreetingServer(PeykUser user) {
-		this.user = user;
+	public GreetingServer(int port) {
+		this.port = port;
 	}
 
 	public void run() {
+		ServerSocket serverSocket = null;
 		while (true) {
 			try {
-				ServerSocket serverSocket = new ServerSocket(user.getPort());
+				serverSocket = new ServerSocket(port);
 				Socket server = serverSocket.accept();
 				DataInputStream in = new DataInputStream(
 						server.getInputStream());
@@ -24,8 +25,15 @@ public class GreetingServer implements Runnable {
 				server.close();
 				serverSocket.close();
 			} catch (IOException e) {
-				e.printStackTrace();
-				break;
+				continue;
+			} finally {
+				if (serverSocket != null) {
+					try {
+						serverSocket.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		}
 	}
