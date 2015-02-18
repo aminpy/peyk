@@ -9,12 +9,12 @@ public class Main {
 		System.out.print("Please Enter Listening Port: ");
 		int port = scanner.nextInt();
 
-		GreetingServer server = new GreetingServer(port);
+		GreetingServer server = new GreetingServer(new PeykUser(port));
 		server.start();
 
 		System.out.print("Please Enter Host: ");
 		String host = scanner.next();
-		GreetingClient client = new GreetingClient(host, port);
+		GreetingClient client = new GreetingClient(new PeykUser(host, port));
 		client.start();
 	}
 }

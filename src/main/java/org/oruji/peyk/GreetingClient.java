@@ -13,12 +13,11 @@ public class GreetingClient implements Runnable {
 
 	private static Logger log = Logger
 			.getLogger(GreetingClient.class.getName());
-	private final String host;
-	private final int port;
 
-	public GreetingClient(String host, int port) {
-		this.host = host;
-		this.port = port;
+	private PeykUser user;
+
+	public GreetingClient(PeykUser user) {
+		this.user = user;
 	}
 
 	public void run() {
@@ -27,7 +26,7 @@ public class GreetingClient implements Runnable {
 		String inputString = null;
 		while (true) {
 			try {
-				Socket client = new Socket(host, port);
+				Socket client = new Socket(user.getHost(), user.getPort());
 
 				OutputStream outToServer = client.getOutputStream();
 				DataOutputStream out = new DataOutputStream(outToServer);
@@ -44,7 +43,7 @@ public class GreetingClient implements Runnable {
 				e.printStackTrace();
 				break;
 			} catch (IOException e) {
-//				log.error(e.getMessage());
+				// log.error(e.getMessage());
 				continue;
 			}
 		}
