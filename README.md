@@ -1,2 +1,2 @@
 # peyk
-a simple lan messenger.
+Simple LAN Messenger with Java
