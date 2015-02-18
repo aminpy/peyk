@@ -43,7 +43,7 @@ public class GreetingClient implements Runnable {
 				e.printStackTrace();
 				break;
 			} catch (IOException e) {
-				// log.error(e.getMessage());
+				log.error(e.getMessage());
 				continue;
 			}
 		}
