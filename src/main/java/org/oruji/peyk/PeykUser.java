@@ -5,12 +5,9 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import org.apache.log4j.Logger;
-
 public final class PeykUser {
 	private final String host;
 	private final int port;
-	private static Logger log = Logger.getLogger(PeykUser.class.getName());
 
 	@SuppressWarnings("unused")
 	private PeykUser() {
@@ -42,10 +39,8 @@ public final class PeykUser {
 			socket.connect(new InetSocketAddress(host, port), 6);
 			socket.close();
 		} catch (UnknownHostException e) {
-			// log.error(e.getMessage());
 			return false;
 		} catch (IOException e) {
-			// log.error(e.getMessage());
 			return false;
 		}
 		return true;

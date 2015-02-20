@@ -21,7 +21,8 @@ public class GreetingServer implements Runnable {
 				Socket server = serverSocket.accept();
 				DataInputStream in = new DataInputStream(
 						server.getInputStream());
-				System.out.println(in.readUTF());
+				String receivedStr = in.readUTF();
+				System.out.println(receivedStr);
 				server.close();
 				serverSocket.close();
 			} catch (IOException e) {
