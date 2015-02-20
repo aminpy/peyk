@@ -3,7 +3,6 @@ package org.oruji.peyk;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Scanner;
-import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -22,14 +21,19 @@ public class Main {
 		GreetingServer server = new GreetingServer(port);
 		server.start();
 
+		final OnlineUser user = new OnlineUser(port);
+		user.start();
+
 		// swing
 		JFrame frame = new JFrame("Peyk Messenger");
 		JPanel panel = new JPanel();
 		list = new JList<PeykUser>();
-
-		list.setListData(getOnlineUsers(port));
+		list.setListData(user.getUserSet());
+		list.setSelectedIndex(0);
+		list.addMouseListener(new ActionJList(list));
 
 		panel.add(new JScrollPane(list));
+
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.getContentPane().add(panel, "Center");
 		frame.setSize(300, 650);
@@ -37,7 +41,7 @@ public class Main {
 
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				list.setListData(getOnlineUsers(port));
+				list.setListData(user.getUserSet());
 			}
 		};
 
@@ -45,30 +49,9 @@ public class Main {
 		timer.setRepeats(true);
 		timer.start();
 
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		// swing
-
 		// System.out.print("Please Enter Host: ");
 		// String host = scanner.next();
 		// GreetingClient client = new GreetingClient(new PeykUser(host, port));
 		// client.start();
-	}
-
-	private static Vector<PeykUser> getOnlineUsers(int port) {
-		Vector<PeykUser> userList = new Vector<PeykUser>();
-
-		for (int i = 1; i <= 255; i++) {
-			PeykUser peykUser = new PeykUser("192.168.1." + i, port);
-			if (peykUser.isOnline()) {
-				userList.addElement(peykUser);
-			}
-		}
-
-		return userList;
 	}
 }
