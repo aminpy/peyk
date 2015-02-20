@@ -6,11 +6,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,6 +27,8 @@ import javax.swing.Timer;
 
 public class Main {
 	static JList<PeykUser> userJList = null;
+	static JFrame chatFrame = null;
+	static Set<JFrame> openChatFrames = new HashSet<JFrame>();
 
 	public static void main(String[] args) {
 		final int port = 8180;
@@ -42,25 +48,39 @@ public class Main {
 		userJList.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
+
 					int index = userJList.locationToIndex(e.getPoint());
 					ListModel<PeykUser> userListModel = userJList.getModel();
 					Object item = userListModel.getElementAt(index);
 
-					final PeykUser peykUser = item instanceof PeykUser ? (PeykUser) item
-							: null;
+					final PeykUser peykUser = (PeykUser) item;
 
 					userJList.ensureIndexIsVisible(index);
 
-					JFrame chatFrame = new JFrame(peykUser.toString());
-					chatFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					if (chatFrame != null && openChatFrames.size() != 0) {
+						for (JFrame ocf : openChatFrames) {
+							if (ocf.getTitle().equals(peykUser.toString())) {
+								ocf.setVisible(true);
+								return;
+							}
+						}
+					}
+
+					chatFrame = new JFrame(peykUser.toString());
+					// chatFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					chatFrame.setSize(600, 300);
 					chatFrame.setLayout(new GridLayout(1, 1));
+
+					chatFrame.addWindowListener(new WindowAdapter() {
+						public void windowClosing(WindowEvent windowEvent) {
+							chatFrame.setVisible(false);
+						}
+					});
 
 					JPanel controlPanel = new JPanel();
 					controlPanel.setLayout(new FlowLayout());
 
 					chatFrame.add(controlPanel);
-					chatFrame.setVisible(true);
 
 					final JTextArea inputArea = new JTextArea(3, 40);
 					final JTextArea histArea = new JTextArea(10, 50);
@@ -99,6 +119,7 @@ public class Main {
 					controlPanel.add(scrollPane);
 					controlPanel.add(showButton);
 					chatFrame.setVisible(true);
+					openChatFrames.add(chatFrame);
 				}
 			}
 		});
