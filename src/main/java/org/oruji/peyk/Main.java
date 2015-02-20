@@ -6,8 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -35,7 +33,7 @@ public class Main {
 		onlineUser.start();
 
 		// swing
-		JFrame frame = new JFrame("Peyk Messenger");
+		JFrame peykFrame = new JFrame("Peyk Messenger");
 		JPanel panel = new JPanel();
 		userJList = new JList<PeykUser>();
 		userJList.setListData(onlineUser.getUserSet());
@@ -53,21 +51,16 @@ public class Main {
 
 					userJList.ensureIndexIsVisible(index);
 
-					JFrame mainFrame = new JFrame(peykUser.toString());
-					mainFrame.setSize(600, 300);
-					mainFrame.setLayout(new GridLayout(1, 1));
-
-					mainFrame.addWindowListener(new WindowAdapter() {
-						public void windowClosing(WindowEvent windowEvent) {
-							System.exit(0);
-						}
-					});
+					JFrame chatFrame = new JFrame(peykUser.toString());
+					chatFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					chatFrame.setSize(600, 300);
+					chatFrame.setLayout(new GridLayout(1, 1));
 
 					JPanel controlPanel = new JPanel();
 					controlPanel.setLayout(new FlowLayout());
 
-					mainFrame.add(controlPanel);
-					mainFrame.setVisible(true);
+					chatFrame.add(controlPanel);
+					chatFrame.setVisible(true);
 
 					final JTextArea inputArea = new JTextArea(3, 40);
 					final JTextArea histArea = new JTextArea(10, 50);
@@ -105,17 +98,17 @@ public class Main {
 					controlPanel.add(scrollPane2);
 					controlPanel.add(scrollPane);
 					controlPanel.add(showButton);
-					mainFrame.setVisible(true);
+					chatFrame.setVisible(true);
 				}
 			}
 		});
 
 		panel.add(new JScrollPane(userJList));
 
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().add(panel, "Center");
-		frame.setSize(300, 650);
-		frame.setVisible(true);
+		peykFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		peykFrame.getContentPane().add(panel, "Center");
+		peykFrame.setSize(300, 650);
+		peykFrame.setVisible(true);
 
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
@@ -126,11 +119,5 @@ public class Main {
 		Timer timer = new Timer(2000, taskPerformer);
 		timer.setRepeats(true);
 		timer.start();
-		// swing
-
-		// System.out.print("Please Enter Host: ");
-		// String host = scanner.next();
-		// GreetingClient client = new GreetingClient(new PeykUser(host, port));
-		// client.start();
 	}
 }
