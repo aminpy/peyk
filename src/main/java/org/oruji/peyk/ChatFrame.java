@@ -86,6 +86,7 @@ public class ChatFrame extends JFrame {
 
 		histArea.setFocusable(false);
 
+		setResizable(false);
 		setVisible(true);
 	}
 

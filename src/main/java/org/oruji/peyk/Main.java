@@ -67,6 +67,7 @@ public class Main {
 		peykFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		peykFrame.getContentPane().add(panel, "Center");
 		peykFrame.setSize(300, 650);
+		peykFrame.setResizable(false);
 		peykFrame.setVisible(true);
 
 		ActionListener taskPerformer = new ActionListener() {
