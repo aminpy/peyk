@@ -15,8 +15,10 @@ import java.net.UnknownHostException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class ChatFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -39,7 +41,7 @@ public class ChatFrame extends JFrame {
 
 		add(controlPanel);
 
-		final JTextArea inputArea = new JTextArea(3, 40);
+		final JTextField inputArea = new JTextField(40);
 		histArea = new JTextArea(10, 50);
 		histArea.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(inputArea);
@@ -48,11 +50,11 @@ public class ChatFrame extends JFrame {
 
 		showButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// histArea.setText(histArea.getText() + "\n"
-				// + inputArea.getText());
-				histArea.setText(histArea.getText().equals("") ? inputArea
-						.getText() : histArea.getText() + "\n"
-						+ inputArea.getText());
+				 histArea.setText(histArea.getText() + "\n"
+				 + inputArea.getText());
+//				histArea.setText(histArea.getText().equals("") ? inputArea
+//						.getText() : histArea.getText() + "\n"
+//						+ inputArea.getText());
 
 				try {
 					Socket client = new Socket(peykUser.getHost(), peykUser
@@ -76,12 +78,21 @@ public class ChatFrame extends JFrame {
 		controlPanel.add(scrollPane2);
 		controlPanel.add(scrollPane);
 		controlPanel.add(showButton);
+
+		JRootPane rootPane = getRootPane();
+		rootPane.setDefaultButton(showButton);
+
 		setVisible(true);
 	}
 
 	public void appendText(String text) {
 		if (histArea == null)
 			histArea = new JTextArea(10, 50);
-		histArea.setText(histArea.getText() + "\n" + text);
+
+		// histArea.setText(histArea.getText() + "\n" + text);
+
+		histArea.setText(histArea.getText().equals("") ? text : histArea
+				.getText() + "\n" + text);
+
 	}
 }

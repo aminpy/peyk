@@ -29,7 +29,6 @@ public class GreetingServer implements Runnable {
 				DataInputStream in = new DataInputStream(
 						server.getInputStream());
 				String receivedStr = in.readUTF();
-				System.out.println(receivedStr);
 
 				PeykUser peykUser = new PeykUser(host, port);
 
