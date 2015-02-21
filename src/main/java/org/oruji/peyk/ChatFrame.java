@@ -48,7 +48,10 @@ public class ChatFrame extends JFrame {
 
 		showButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				histArea.setText(histArea.getText() + "\n"
+				// histArea.setText(histArea.getText() + "\n"
+				// + inputArea.getText());
+				histArea.setText(histArea.getText().equals("") ? inputArea
+						.getText() : histArea.getText() + "\n"
 						+ inputArea.getText());
 
 				try {
