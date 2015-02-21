@@ -53,7 +53,8 @@ public class OnlineUser implements Runnable {
 		for (Enumeration<NetworkInterface> en = NetworkInterface
 				.getNetworkInterfaces(); en.hasMoreElements();) {
 			NetworkInterface netInterface = en.nextElement();
-			if (netInterface.getName().equals("wlan0")) {
+			if (netInterface.getName().equals("wlan0")
+					|| netInterface.getName().equals("eth0")) {
 				for (InetAddress address : Collections.list(netInterface
 						.getInetAddresses())) {
 					if (address instanceof Inet4Address)
