@@ -75,7 +75,7 @@ public class Main {
 			}
 		};
 
-		Timer timer = new Timer(2000, taskPerformer);
+		Timer timer = new Timer(5000, taskPerformer);
 		timer.setRepeats(true);
 		timer.start();
 	}

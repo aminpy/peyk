@@ -23,27 +23,26 @@ public class OnlineUser implements Runnable {
 	}
 
 	public void run() {
-		// while (true) {
-		try {
-			userSet = new Vector<PeykUser>();
-			for (int i = 1; i <= 255; i++) {
-				PeykUser user = new PeykUser("192.168.1." + i, port);
-				if (user.getHost().equals(getMyIp()))
-					continue;
-				if (user.isOnline()) {
-					userSet.add(user);
+		while (true) {
+			try {
+				userSet = new Vector<PeykUser>();
+				for (int i = 1; i <= 255; i++) {
+					PeykUser user = new PeykUser("192.168.1." + i, port);
+					if (user.getHost().equals(getMyIp()))
+						continue;
+					if (user.isOnline()) {
+						userSet.add(user);
+					}
 				}
-			}
 
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (SocketException e) {
-			e.printStackTrace();
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (SocketException e) {
+				e.printStackTrace();
+			}
 		}
 	}
-
-	// }
 
 	public void start() {
 		new Thread(this).start();
