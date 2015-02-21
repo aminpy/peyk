@@ -50,11 +50,9 @@ public class ChatFrame extends JFrame {
 
 		showButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 histArea.setText(histArea.getText() + "\n"
-				 + inputArea.getText());
-//				histArea.setText(histArea.getText().equals("") ? inputArea
-//						.getText() : histArea.getText() + "\n"
-//						+ inputArea.getText());
+				histArea.setText(histArea.getText().equals("") ? inputArea
+						.getText() : histArea.getText() + "\n"
+						+ inputArea.getText());
 
 				try {
 					Socket client = new Socket(peykUser.getHost(), peykUser
@@ -88,8 +86,6 @@ public class ChatFrame extends JFrame {
 	public void appendText(String text) {
 		if (histArea == null)
 			histArea = new JTextArea(10, 50);
-
-		// histArea.setText(histArea.getText() + "\n" + text);
 
 		histArea.setText(histArea.getText().equals("") ? text : histArea
 				.getText() + "\n" + text);

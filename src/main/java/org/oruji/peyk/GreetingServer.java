@@ -51,7 +51,6 @@ public class GreetingServer implements Runnable {
 				server.close();
 				serverSocket.close();
 			} catch (IOException e) {
-				System.out.println(e.getMessage());
 				continue;
 			} finally {
 				if (serverSocket != null) {
