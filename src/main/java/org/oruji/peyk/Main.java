@@ -46,7 +46,7 @@ public class Main {
 
 					userJList.ensureIndexIsVisible(index);
 
-					if (chatFrame != null && openChatFrames.size() != 0) {
+					if (openChatFrames.size() != 0) {
 						for (JFrame ocf : openChatFrames) {
 							if (ocf.getTitle().equals(peykUser.toString())) {
 								ocf.setVisible(true);
