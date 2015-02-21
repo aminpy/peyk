@@ -17,7 +17,7 @@ public class OnlineUser implements Runnable {
 	}
 
 	public void run() {
-		while (true) {
+//		while (true) {
 			userSet = new Vector<PeykUser>();
 			for (int i = 1; i <= 255; i++) {
 				PeykUser user = new PeykUser("192.168.1." + i, port);
@@ -31,7 +31,7 @@ public class OnlineUser implements Runnable {
 				e.printStackTrace();
 			}
 		}
-	}
+//	}
 
 	public void start() {
 		new Thread(this).start();
