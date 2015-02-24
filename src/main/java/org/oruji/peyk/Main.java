@@ -25,6 +25,9 @@ public class Main {
 		JFrame peykFrame = new JFrame("Peyk Messenger");
 		JPanel panel = new JPanel();
 		userJList = new JList<PeykUser>();
+
+		userJList.setListData(new OnlineUser(port).getOnlineUsers());
+
 		userJList.setSelectedIndex(0);
 
 		userJList.addMouseListener(new MouseAdapter() {

@@ -55,19 +55,29 @@ public class ChatFrame extends JFrame {
 						.getText() : histArea.getText() + "\n"
 						+ inputArea.getText());
 
+				Socket client = null;
+				OutputStream outToServer = null;
+				DataOutputStream out = null;
 				try {
-					Socket client = new Socket(peykUser.getHost(), peykUser
-							.getPort());
-					OutputStream outToServer = client.getOutputStream();
-					DataOutputStream out = new DataOutputStream(outToServer);
-
+					client = new Socket(peykUser.getHost(), peykUser.getPort());
+					outToServer = client.getOutputStream();
+					out = new DataOutputStream(outToServer);
 					out.writeUTF(inputArea.getText());
-
-					client.close();
 				} catch (UnknownHostException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
 					e1.printStackTrace();
+				} finally {
+					try {
+						if (client != null)
+							client.close();
+						if (outToServer != null)
+							outToServer.close();
+						if (out != null)
+							out.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 				}
 
 				inputArea.setText("");

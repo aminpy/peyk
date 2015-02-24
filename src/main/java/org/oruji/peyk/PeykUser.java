@@ -1,6 +1,8 @@
 package org.oruji.peyk;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -34,15 +36,32 @@ public final class PeykUser {
 	}
 
 	public boolean isOnline() {
+		Socket socket = null;
+		OutputStream outToServer = null;
+		DataOutputStream out = null;
 		try {
-			Socket socket = new Socket();
+			socket = new Socket();
 			socket.connect(new InetSocketAddress(host, port), 6);
-			socket.close();
+			outToServer = socket.getOutputStream();
+			out = new DataOutputStream(outToServer);
+			out.writeUTF("[[[[ping]]]]");
 		} catch (UnknownHostException e) {
 			return false;
 		} catch (IOException e) {
 			return false;
+		} finally {
+			try {
+				if (socket != null)
+					socket.close();
+				if (outToServer != null)
+					outToServer.close();
+				if (out != null)
+					out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+
 		return true;
 	}
 

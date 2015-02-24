@@ -1,5 +1,7 @@
 package org.oruji.peyk;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.TimeoutException;
 
@@ -7,23 +9,26 @@ import org.icmp4j.IcmpPingRequest;
 import org.icmp4j.IcmpPingUtil;
 
 public class OnlineUser {
-	public static void main(String[] args) {
-		System.out.println(getOnlines());
+
+	private Set<String> nodes = new HashSet<String>();
+	private int port;
+
+	public OnlineUser(int port) {
+		this.port = port;
 	}
 
-	public static Vector<String> getOnlines() {
-		Vector<String> myVec = new Vector<String>();
-		for (int i = 2; i < 254; i++) {
+	private Set<String> getNodes() {
+		for (int i = 2; i < 3; i++) {
 			String host = "192.168.1." + i;
 			if (isReachable(host)) {
-				myVec.add(host);
+				nodes.add(host);
 			}
 		}
 
-		return myVec;
+		return nodes;
 	}
 
-	public static boolean isReachable(final String host) {
+	public boolean isReachable(final String host) {
 		try {
 			Runnable runn = new Runnable() {
 				public void run() {
@@ -39,5 +44,20 @@ public class OnlineUser {
 		} catch (TimeoutException e) {
 			return false;
 		}
+	}
+
+	public Vector<PeykUser> getOnlineUsers() {
+		Vector<PeykUser> onlineUsers = new Vector<PeykUser>();
+
+		getNodes();
+
+		for (String node : nodes) {
+			PeykUser user = new PeykUser(node, port);
+			if (user.isOnline()) {
+				onlineUsers.add(user);
+			}
+		}
+
+		return onlineUsers;
 	}
 }
