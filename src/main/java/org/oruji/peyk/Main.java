@@ -1,7 +1,5 @@
 package org.oruji.peyk;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
@@ -12,7 +10,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListModel;
-import javax.swing.Timer;
 
 public class Main {
 	static JList<PeykUser> userJList = null;
@@ -24,14 +21,10 @@ public class Main {
 		GreetingServer server = new GreetingServer(port, openChatFrames);
 		server.start();
 
-		final OnlineUser onlineUser = new OnlineUser(port);
-		onlineUser.start();
-
 		// swing
 		JFrame peykFrame = new JFrame("Peyk Messenger");
 		JPanel panel = new JPanel();
 		userJList = new JList<PeykUser>();
-		userJList.setListData(onlineUser.getUserSet());
 		userJList.setSelectedIndex(0);
 
 		userJList.addMouseListener(new MouseAdapter() {
@@ -69,15 +62,5 @@ public class Main {
 		peykFrame.setSize(300, 650);
 		peykFrame.setResizable(false);
 		peykFrame.setVisible(true);
-
-		ActionListener taskPerformer = new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				userJList.setListData(onlineUser.getUserSet());
-			}
-		};
-
-		Timer timer = new Timer(5000, taskPerformer);
-		timer.setRepeats(true);
-		timer.start();
 	}
 }

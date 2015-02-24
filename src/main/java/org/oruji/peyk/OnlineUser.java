@@ -1,67 +1,43 @@
 package org.oruji.peyk;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Vector;
+import java.util.concurrent.TimeoutException;
 
-public class OnlineUser implements Runnable {
+import org.icmp4j.IcmpPingRequest;
+import org.icmp4j.IcmpPingUtil;
 
-	private int port;
-
-	public OnlineUser(int port) {
-		this.port = port;
+public class OnlineUser {
+	public static void main(String[] args) {
+		System.out.println(getOnlines());
 	}
 
-	public Vector<PeykUser> userSet = new Vector<PeykUser>();
-
-	public Vector<PeykUser> getUserSet() {
-		return userSet;
-	}
-
-	public void run() {
-		while (true) {
-			try {
-				userSet = new Vector<PeykUser>();
-				for (int i = 1; i <= 255; i++) {
-					PeykUser user = new PeykUser("192.168.1." + i, port);
-					if (user.getHost().equals(getMyIp()))
-						continue;
-					if (user.isOnline()) {
-						userSet.add(user);
-					}
-				}
-
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (SocketException e) {
-				e.printStackTrace();
+	public static Vector<String> getOnlines() {
+		Vector<String> myVec = new Vector<String>();
+		for (int i = 2; i < 254; i++) {
+			String host = "192.168.1." + i;
+			if (isReachable(host)) {
+				myVec.add(host);
 			}
 		}
+
+		return myVec;
 	}
 
-	public void start() {
-		new Thread(this).start();
-	}
-
-	public String getMyIp() throws SocketException {
-		String myIp = null;
-		for (Enumeration<NetworkInterface> en = NetworkInterface
-				.getNetworkInterfaces(); en.hasMoreElements();) {
-			NetworkInterface netInterface = en.nextElement();
-			if (netInterface.getName().equals("wlan0")
-					|| netInterface.getName().equals("eth0")) {
-				for (InetAddress address : Collections.list(netInterface
-						.getInetAddresses())) {
-					if (address instanceof Inet4Address)
-						myIp = address.toString().substring(1);
+	public static boolean isReachable(final String host) {
+		try {
+			Runnable runn = new Runnable() {
+				public void run() {
+					IcmpPingRequest request = IcmpPingUtil
+							.createIcmpPingRequest();
+					request.setHost(host);
+					IcmpPingUtil.executePingRequest(request);
 				}
-			}
+			};
+
+			TimeoutController.execute(runn, 30);
+			return true;
+		} catch (TimeoutException e) {
+			return false;
 		}
-		return myIp;
 	}
 }
