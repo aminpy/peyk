@@ -1,8 +1,9 @@
 package org.oruji.peyk;
 
-import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,7 +20,7 @@ public class GreetingServer implements Runnable {
 	public void run() {
 		ServerSocket serverSocket = null;
 		Socket server = null;
-		DataInputStream in = null;
+		ObjectInputStream in = null;
 		while (true) {
 			try {
 				serverSocket = new ServerSocket(port);
@@ -27,19 +28,24 @@ public class GreetingServer implements Runnable {
 				server = serverSocket.accept();
 				log.info("after  server accept >>>>>>>>>>>>>>>");
 
-				in = new DataInputStream(server.getInputStream());
-				String receivedStr = in.readUTF();
+				InputStream inputStream = server.getInputStream();
 
-				if (receivedStr.equals("[[[[ping]]]]"))
+				in = new ObjectInputStream(inputStream);
+				Object inputObj = in.readObject();
+
+				if (inputObj instanceof PeykUser) {
+					PeykUser peykUser = (PeykUser) inputObj;
 					continue;
 
-				String host = server.toString().split("=")[1].split(",port")[0]
-						.substring(1);
-				PeykUser peykUser = new PeykUser(host, port);
+				} else if (inputObj instanceof String) {
+					String host = server.toString().split("=")[1]
+							.split(",port")[0].substring(1);
+					PeykUser peykUser = new PeykUser(host, port);
 
-				ChatFrame chatFrame = ChatFrame.getChatFrame(peykUser);
+					ChatFrame chatFrame = ChatFrame.getChatFrame(peykUser);
 
-				chatFrame.appendText(receivedStr);
+					chatFrame.appendText((String) inputObj);
+				}
 
 			} catch (IOException e) {
 				if (e instanceof EOFException) {
@@ -48,6 +54,8 @@ public class GreetingServer implements Runnable {
 
 				continue;
 
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 			} finally {
 				try {
 					if (serverSocket != null)

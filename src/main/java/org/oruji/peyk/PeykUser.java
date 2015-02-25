@@ -1,13 +1,15 @@
 package org.oruji.peyk;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public final class PeykUser {
+public final class PeykUser implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private final String host;
 	private final int port;
 
@@ -36,15 +38,15 @@ public final class PeykUser {
 	}
 
 	public boolean isOnline() {
+		ObjectOutputStream outputStream = null;
 		Socket socket = null;
-		OutputStream outToServer = null;
-		DataOutputStream out = null;
+		OutputStream out = null;
 		try {
 			socket = new Socket();
 			socket.connect(new InetSocketAddress(host, port), 6);
-			outToServer = socket.getOutputStream();
-			out = new DataOutputStream(outToServer);
-			out.writeUTF("[[[[ping]]]]");
+			out = socket.getOutputStream();
+			outputStream = new ObjectOutputStream(out);
+			outputStream.writeObject(this);
 		} catch (UnknownHostException e) {
 			return false;
 		} catch (IOException e) {
@@ -53,10 +55,10 @@ public final class PeykUser {
 			try {
 				if (socket != null)
 					socket.close();
-				if (outToServer != null)
-					outToServer.close();
 				if (out != null)
 					out.close();
+				if (outputStream != null)
+					outputStream.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

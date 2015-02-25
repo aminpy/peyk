@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -36,8 +36,10 @@ public class ChatFrame extends JFrame {
 				return cf;
 			}
 		}
+
 		ChatFrame chatFrame = new ChatFrame(peykUser);
 		chatFrames.add(chatFrame);
+
 		return chatFrame;
 	}
 
@@ -73,12 +75,12 @@ public class ChatFrame extends JFrame {
 
 				Socket client = null;
 				OutputStream outToServer = null;
-				DataOutputStream out = null;
+				ObjectOutputStream out = null;
 				try {
 					client = new Socket(peykUser.getHost(), peykUser.getPort());
 					outToServer = client.getOutputStream();
-					out = new DataOutputStream(outToServer);
-					out.writeUTF(inputArea.getText());
+					out = new ObjectOutputStream(outToServer);
+					out.writeObject(inputArea.getText());
 				} catch (UnknownHostException e1) {
 					e1.printStackTrace();
 				} catch (IOException e1) {
