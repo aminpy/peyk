@@ -5,9 +5,6 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.TimeoutException;
 
-import org.icmp4j.IcmpPingRequest;
-import org.icmp4j.IcmpPingUtil;
-
 public class OnlineUser {
 
 	private Set<String> nodes = new HashSet<String>();
@@ -18,7 +15,7 @@ public class OnlineUser {
 	}
 
 	private Set<String> getNodes() {
-		for (int i = 2; i < 3; i++) {
+		for (int i = 2; i < 10; i++) {
 			String host = "192.168.1." + i;
 			if (isReachable(host)) {
 				nodes.add(host);
@@ -32,10 +29,7 @@ public class OnlineUser {
 		try {
 			Runnable runn = new Runnable() {
 				public void run() {
-					IcmpPingRequest request = IcmpPingUtil
-							.createIcmpPingRequest();
-					request.setHost(host);
-					IcmpPingUtil.executePingRequest(request);
+					
 				}
 			};
 
