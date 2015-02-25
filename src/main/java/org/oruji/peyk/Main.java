@@ -2,8 +2,6 @@ package org.oruji.peyk;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -14,11 +12,10 @@ import javax.swing.ListModel;
 public class Main {
 	static JList<PeykUser> userJList = null;
 	static ChatFrame chatFrame = null;
-	static Set<ChatFrame> openChatFrames = new HashSet<ChatFrame>();
 
 	public static void main(String[] args) {
 		final int port = 8180;
-		GreetingServer server = new GreetingServer(port, openChatFrames);
+		GreetingServer server = new GreetingServer(port);
 		server.start();
 
 		// swing
@@ -33,7 +30,6 @@ public class Main {
 		userJList.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				if (e.getClickCount() == 2) {
-
 					int index = userJList.locationToIndex(e.getPoint());
 					ListModel<PeykUser> userListModel = userJList.getModel();
 					Object item = userListModel.getElementAt(index);
@@ -42,18 +38,7 @@ public class Main {
 
 					userJList.ensureIndexIsVisible(index);
 
-					if (openChatFrames.size() != 0) {
-						for (JFrame ocf : openChatFrames) {
-							if (ocf.getTitle().equals(peykUser.toString())) {
-								ocf.setVisible(true);
-								return;
-							}
-						}
-					}
-
-					chatFrame = new ChatFrame(peykUser);
-
-					openChatFrames.add(chatFrame);
+					ChatFrame.getChatFrame(peykUser);
 				}
 			}
 		});

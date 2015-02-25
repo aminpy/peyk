@@ -5,19 +5,15 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 public class GreetingServer implements Runnable {
-	Set<ChatFrame> openChatFrames = new HashSet<ChatFrame>();
 	private int port;
 	Logger log = Logger.getLogger(GreetingServer.class.getName());
 
-	public GreetingServer(int port, Set<ChatFrame> openChatFrames) {
+	public GreetingServer(int port) {
 		this.port = port;
-		this.openChatFrames = openChatFrames;
 	}
 
 	public void run() {
@@ -41,27 +37,17 @@ public class GreetingServer implements Runnable {
 						.substring(1);
 				PeykUser peykUser = new PeykUser(host, port);
 
-				ChatFrame chatFrame = null;
-				for (ChatFrame chat : openChatFrames) {
-					if (chat.getTitle().equals(peykUser.toString())) {
-						chatFrame = chat;
-						chatFrame.setVisible(true);
-						break;
-					}
-				}
-
-				if (chatFrame == null) {
-					chatFrame = new ChatFrame(peykUser);
-				}
+				ChatFrame chatFrame = ChatFrame.getChatFrame(peykUser);
 
 				chatFrame.appendText(receivedStr);
-				openChatFrames.add(chatFrame);
+
 			} catch (IOException e) {
 				if (e instanceof EOFException) {
 					log.error("EOF Exception occured !");
 				}
 
 				continue;
+
 			} finally {
 				try {
 					if (serverSocket != null)
@@ -79,6 +65,6 @@ public class GreetingServer implements Runnable {
 	}
 
 	public void start() {
-		new Thread(this).start();
+		new Thread(this, "Server Thread").start();
 	}
 }

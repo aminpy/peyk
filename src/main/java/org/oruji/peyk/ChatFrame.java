@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,10 +25,24 @@ import javax.swing.text.DefaultCaret;
 
 public class ChatFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-
 	private JTextArea histArea = null;
+	private final PeykUser peykUser;
+	private static Set<ChatFrame> chatFrames = new HashSet<ChatFrame>();
 
-	public ChatFrame(final PeykUser peykUser) {
+	public static ChatFrame getChatFrame(PeykUser peykUser) {
+		for (ChatFrame cf : chatFrames) {
+			if (cf.toString().equals(peykUser.toString())) {
+				cf.setVisible(true);
+				return cf;
+			}
+		}
+		ChatFrame chatFrame = new ChatFrame(peykUser);
+		chatFrames.add(chatFrame);
+		return chatFrame;
+	}
+
+	private ChatFrame(final PeykUser peykUser) {
+		this.peykUser = peykUser;
 		setTitle(peykUser.toString());
 		setSize(600, 300);
 		setLayout(new GridLayout(1, 1));
@@ -107,5 +123,10 @@ public class ChatFrame extends JFrame {
 		histArea.setText(histArea.getText().equals("") ? text : histArea
 				.getText() + "\n" + text);
 
+	}
+
+	@Override
+	public String toString() {
+		return peykUser.toString();
 	}
 }
