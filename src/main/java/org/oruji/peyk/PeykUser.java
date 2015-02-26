@@ -10,13 +10,12 @@ import java.net.UnknownHostException;
 
 public final class PeykUser implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private final String host;
-	private final int port;
+	private String host;
+	private int port;
+	private String name;
 
 	@SuppressWarnings("unused")
 	private PeykUser() {
-		this.host = null;
-		this.port = 0;
 	}
 
 	public PeykUser(int port) {
@@ -35,6 +34,22 @@ public final class PeykUser implements Serializable {
 
 	public int getPort() {
 		return port;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
 	}
 
 	public boolean isOnline() {

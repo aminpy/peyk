@@ -6,8 +6,8 @@ import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.apache.log4j.Logger;
 
@@ -15,7 +15,7 @@ public class OnlineListenUdp implements Runnable {
 	Logger log = Logger.getLogger(OnlineListenUdp.class.getName());
 
 	private int port;
-	private Set<PeykUser> peykUsers = new HashSet<PeykUser>();
+	private Set<PeykUser> peykUsers = new CopyOnWriteArraySet<PeykUser>();
 
 	public OnlineListenUdp(int port, Set<PeykUser> peykUsers) {
 		this.port = port;
@@ -39,6 +39,7 @@ public class OnlineListenUdp implements Runnable {
 				if (obj instanceof PeykUser) {
 					PeykUser peykUser = (PeykUser) obj;
 					log.info("server UDP: " + peykUser);
+
 					peykUsers.add(peykUser);
 				}
 
@@ -51,7 +52,6 @@ public class OnlineListenUdp implements Runnable {
 			} finally {
 				datagramSocket.close();
 			}
-			log.info(peykUsers);
 		}
 	}
 
@@ -79,6 +79,7 @@ public class OnlineListenUdp implements Runnable {
 			try {
 				if (in != null)
 					in.close();
+
 				if (is != null)
 					is.close();
 
