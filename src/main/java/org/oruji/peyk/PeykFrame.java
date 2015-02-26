@@ -59,7 +59,7 @@ public class PeykFrame extends JFrame {
 			}
 		};
 
-		Timer timer = new Timer(2000, taskPerformer);
+		Timer timer = new Timer(3000, taskPerformer);
 		timer.setRepeats(true);
 		timer.start();
 	}

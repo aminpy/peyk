@@ -83,7 +83,7 @@ public class OnlineBroadCast implements Runnable {
 				onlineUsers.addAll(tempUsers);
 				tempUsers.clear();
 				System.out.println(onlineUsers);
-				Thread.sleep(5000);
+				Thread.sleep(3000);
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
