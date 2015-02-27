@@ -26,26 +26,26 @@ import javax.swing.text.DefaultCaret;
 public class ChatFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextArea histArea = null;
-	private final PeykUser peykUser;
+	private final PeykUser destUser;
 	private static Set<ChatFrame> chatFrames = new HashSet<ChatFrame>();
 
-	public static ChatFrame getChatFrame(PeykUser peykUser) {
+	public static ChatFrame getChatFrame(PeykUser destUser) {
 		for (ChatFrame cf : chatFrames) {
-			if (cf.toString().equals(peykUser.toStringUnique())) {
+			if (cf.toString().equals(destUser.toStringUnique())) {
 				cf.setVisible(true);
 				return cf;
 			}
 		}
 
-		ChatFrame chatFrame = new ChatFrame(peykUser);
+		ChatFrame chatFrame = new ChatFrame(destUser);
 		chatFrames.add(chatFrame);
 
 		return chatFrame;
 	}
 
-	private ChatFrame(final PeykUser peykUser) {
-		this.peykUser = peykUser;
-		setTitle(peykUser.toString());
+	private ChatFrame(final PeykUser destUser) {
+		this.destUser = destUser;
+		setTitle(destUser.toString());
 		setSize(600, 300);
 		setLayout(new GridLayout(1, 1));
 
@@ -73,8 +73,8 @@ public class ChatFrame extends JFrame {
 						+ inputArea.getText() : histArea.getText() + "\n"
 						+ "me: " + inputArea.getText());
 
-				peykUser.setMessage(inputArea.getText());
-				sendMessage(peykUser);
+				destUser.setMessage(inputArea.getText());
+				PeykMessage.sendMessage(destUser);
 
 				inputArea.setText("");
 			}
@@ -107,40 +107,6 @@ public class ChatFrame extends JFrame {
 
 	@Override
 	public String toString() {
-		return peykUser.toStringUnique();
-	}
-
-	public void sendMessage(PeykUser user) {
-		Socket client = null;
-		OutputStream outToServer = null;
-		ObjectOutputStream out = null;
-
-		try {
-			client = new Socket(user.getHost(), user.getPort());
-			outToServer = client.getOutputStream();
-			out = new ObjectOutputStream(outToServer);
-			out.writeObject(user);
-
-		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
-
-		} catch (IOException e1) {
-			e1.printStackTrace();
-
-		} finally {
-			try {
-				if (client != null)
-					client.close();
-
-				if (outToServer != null)
-					outToServer.close();
-
-				if (out != null)
-					out.close();
-
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-		}
+		return destUser.toStringUnique();
 	}
 }

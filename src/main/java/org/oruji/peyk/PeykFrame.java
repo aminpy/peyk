@@ -18,7 +18,7 @@ import javax.swing.Timer;
 public class PeykFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	public PeykFrame(final PeykUser serverUser, final Set<PeykUser> onlineUsers) {
+	public PeykFrame(final PeykUser sourceUser, final Set<PeykUser> onlineUsers) {
 		setTitle("Peyk Messenger");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -38,19 +38,17 @@ public class PeykFrame extends JFrame {
 					ListModel<PeykUser> userListModel = userJList.getModel();
 					Object item = userListModel.getElementAt(index);
 
-					final PeykUser peykUser = (PeykUser) item;
+					final PeykUser selectedUser = (PeykUser) item;
 
 					userJList.ensureIndexIsVisible(index);
-
-					peykUser.setName(serverUser.getName());
-					ChatFrame.getChatFrame(peykUser);
+					ChatFrame.getChatFrame(selectedUser);
 				}
 			}
 		});
 
 		text.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				serverUser.setName(text.getText());
+				sourceUser.setName(text.getText());
 				text.transferFocus();
 			}
 		});
