@@ -47,6 +47,13 @@ public class PeykFrame extends JFrame {
 			}
 		});
 
+		text.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(text.getText());
+				text.transferFocus();
+			}
+		});
+
 		panel.add(text);
 		panel.add(new JScrollPane(userJList));
 
