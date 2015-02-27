@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.Timer;
 
@@ -19,7 +20,9 @@ public class PeykFrame extends JFrame {
 	public PeykFrame(int port, final Set<PeykUser> onlineUsers) {
 		setTitle("Peyk Messenger");
 		JPanel panel = new JPanel();
+
 		final JList<PeykUser> userJList = new JList<PeykUser>();
+		final JTextField text = new JTextField(15);
 
 		PeykUser[] onlineArray = onlineUsers.toArray(new PeykUser[onlineUsers
 				.size()]);
@@ -44,6 +47,7 @@ public class PeykFrame extends JFrame {
 			}
 		});
 
+		panel.add(text);
 		panel.add(new JScrollPane(userJList));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
