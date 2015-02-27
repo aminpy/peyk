@@ -21,9 +21,6 @@ public class PeykFrame extends JFrame {
 	public PeykFrame(final PeykUser serverUser, final Set<PeykUser> onlineUsers) {
 		setTitle("Peyk Messenger");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(300, 650);
-		setResizable(true);
-		setVisible(true);
 
 		final JList<PeykUser> userJList = new JList<PeykUser>();
 		final JTextField text = new JTextField(15);
@@ -80,5 +77,9 @@ public class PeykFrame extends JFrame {
 		Timer timer = new Timer(3000, taskPerformer);
 		timer.setRepeats(true);
 		timer.start();
+
+		setSize(300, 650);
+		setResizable(true);
+		setVisible(true);
 	}
 }
