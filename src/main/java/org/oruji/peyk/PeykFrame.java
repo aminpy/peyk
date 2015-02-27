@@ -42,6 +42,7 @@ public class PeykFrame extends JFrame {
 
 					userJList.ensureIndexIsVisible(index);
 
+					peykUser.setName(serverUser.getName());
 					ChatFrame.getChatFrame(peykUser);
 				}
 			}

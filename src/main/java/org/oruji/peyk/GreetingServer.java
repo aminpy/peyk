@@ -26,7 +26,8 @@ public class GreetingServer implements Runnable {
 
 			ChatFrame chatFrame = ChatFrame.getChatFrame(peykUser);
 
-			chatFrame.appendText(peykUser.getMessage());
+			chatFrame.appendText(peykUser.getName() + ": "
+					+ peykUser.getMessage());
 		}
 	}
 
@@ -54,7 +55,9 @@ public class GreetingServer implements Runnable {
 			String host = server.toString().split("=")[1].split(",port")[0]
 					.substring(1);
 			peykUser = new PeykUser(host, port);
-			peykUser.setMessage((String) inputObj);
+			PeykUser receivedUser = (PeykUser) inputObj;
+			peykUser.setName(receivedUser.getName());
+			peykUser.setMessage(receivedUser.getMessage());
 
 		} catch (IOException e) {
 			if (e instanceof EOFException) {
