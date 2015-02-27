@@ -101,6 +101,10 @@ public final class PeykUser implements Serializable {
 
 	@Override
 	public String toString() {
+		return name;
+	};
+
+	public String toStringUnique() {
 		return host + ":" + port;
 	}
 }

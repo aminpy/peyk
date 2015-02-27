@@ -13,6 +13,6 @@ public class Main {
 		new GreetingServer(port).start();
 		new OnlineListenUdp(port, tempUsers).start();
 		new OnlineBroadCast(serverUser, onlineUsers, tempUsers).start();
-		new PeykFrame(port, onlineUsers);
+		new PeykFrame(serverUser, onlineUsers);
 	}
 }

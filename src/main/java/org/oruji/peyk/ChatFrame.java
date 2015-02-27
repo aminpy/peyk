@@ -31,7 +31,7 @@ public class ChatFrame extends JFrame {
 
 	public static ChatFrame getChatFrame(PeykUser peykUser) {
 		for (ChatFrame cf : chatFrames) {
-			if (cf.toString().equals(peykUser.toString())) {
+			if (cf.toString().equals(peykUser.toStringUnique())) {
 				cf.setVisible(true);
 				return cf;
 			}
@@ -129,6 +129,6 @@ public class ChatFrame extends JFrame {
 
 	@Override
 	public String toString() {
-		return peykUser.toString();
+		return peykUser.toStringUnique();
 	}
 }

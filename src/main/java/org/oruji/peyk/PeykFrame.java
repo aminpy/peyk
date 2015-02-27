@@ -17,7 +17,7 @@ import javax.swing.Timer;
 public class PeykFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	public PeykFrame(int port, final Set<PeykUser> onlineUsers) {
+	public PeykFrame(final PeykUser serverUser, final Set<PeykUser> onlineUsers) {
 		setTitle("Peyk Messenger");
 		JPanel panel = new JPanel();
 
@@ -49,7 +49,7 @@ public class PeykFrame extends JFrame {
 
 		text.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(text.getText());
+				serverUser.setName(text.getText());
 				text.transferFocus();
 			}
 		});
