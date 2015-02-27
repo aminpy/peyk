@@ -1,5 +1,6 @@
 package org.oruji.peyk;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -19,7 +20,10 @@ public class PeykFrame extends JFrame {
 
 	public PeykFrame(final PeykUser serverUser, final Set<PeykUser> onlineUsers) {
 		setTitle("Peyk Messenger");
-		JPanel panel = new JPanel();
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(300, 650);
+		setResizable(true);
+		setVisible(true);
 
 		final JList<PeykUser> userJList = new JList<PeykUser>();
 		final JTextField text = new JTextField(15);
@@ -28,7 +32,6 @@ public class PeykFrame extends JFrame {
 				.size()]);
 
 		userJList.setListData(onlineArray);
-
 		userJList.setSelectedIndex(0);
 
 		userJList.addMouseListener(new MouseAdapter() {
@@ -54,14 +57,18 @@ public class PeykFrame extends JFrame {
 			}
 		});
 
-		panel.add(text);
-		panel.add(new JScrollPane(userJList));
+		JScrollPane listScroll = new JScrollPane(userJList);
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Dimension d = userJList.getPreferredSize();
+		d.width = 200;
+		d.height = 200;
+		listScroll.setPreferredSize(d);
+
+		JPanel panel = new JPanel();
+		panel.add(text);
+		panel.add(listScroll);
+
 		getContentPane().add(panel, "Center");
-		setSize(300, 650);
-		setResizable(false);
-		setVisible(true);
 
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
