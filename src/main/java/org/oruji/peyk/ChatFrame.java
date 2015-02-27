@@ -73,30 +73,7 @@ public class ChatFrame extends JFrame {
 						.getText() : histArea.getText() + "\n"
 						+ inputArea.getText());
 
-				Socket client = null;
-				OutputStream outToServer = null;
-				ObjectOutputStream out = null;
-				try {
-					client = new Socket(peykUser.getHost(), peykUser.getPort());
-					outToServer = client.getOutputStream();
-					out = new ObjectOutputStream(outToServer);
-					out.writeObject(inputArea.getText());
-				} catch (UnknownHostException e1) {
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				} finally {
-					try {
-						if (client != null)
-							client.close();
-						if (outToServer != null)
-							outToServer.close();
-						if (out != null)
-							out.close();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-				}
+				sendMessage(peykUser, inputArea.getText());
 
 				inputArea.setText("");
 			}
@@ -130,5 +107,39 @@ public class ChatFrame extends JFrame {
 	@Override
 	public String toString() {
 		return peykUser.toStringUnique();
+	}
+
+	public void sendMessage(PeykUser user, String text) {
+		Socket client = null;
+		OutputStream outToServer = null;
+		ObjectOutputStream out = null;
+
+		try {
+			client = new Socket(user.getHost(), user.getPort());
+			outToServer = client.getOutputStream();
+			out = new ObjectOutputStream(outToServer);
+			out.writeObject(text);
+
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+
+		} catch (IOException e1) {
+			e1.printStackTrace();
+
+		} finally {
+			try {
+				if (client != null)
+					client.close();
+
+				if (outToServer != null)
+					outToServer.close();
+
+				if (out != null)
+					out.close();
+
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 }
