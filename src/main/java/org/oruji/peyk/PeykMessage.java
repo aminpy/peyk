@@ -24,7 +24,9 @@ public class PeykMessage {
 			client = new Socket(destUser.getHost(), destUser.getPort());
 			outToServer = client.getOutputStream();
 			out = new ObjectOutputStream(outToServer);
-			out.writeObject(destUser);
+			PeykUser sourceUser = PeykUser.getSourceUser(destUser.getPort());
+			sourceUser.setMessage(destUser.getMessage());
+			out.writeObject(sourceUser);
 
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();

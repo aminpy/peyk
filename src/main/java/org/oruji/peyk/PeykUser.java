@@ -14,6 +14,19 @@ public final class PeykUser implements Serializable {
 	private int port;
 	private String name;
 	private String message;
+	private static PeykUser sourceUser = null;
+
+	public static PeykUser getSourceUser(int port) {
+		if (sourceUser != null)
+			return sourceUser;
+
+		sourceUser = new PeykUser();
+		sourceUser.setHost(OnlineBroadCast.getMyAddress());
+		sourceUser.setPort(port);
+		sourceUser.setName(System.getProperty("user.name"));
+
+		return sourceUser;
+	}
 
 	public PeykUser() {
 	}
