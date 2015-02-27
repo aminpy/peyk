@@ -24,7 +24,7 @@ public class PeykMessage {
 			client = new Socket(destUser.getHost(), destUser.getPort());
 			outToServer = client.getOutputStream();
 			out = new ObjectOutputStream(outToServer);
-			PeykUser sourceUser = PeykUser.getSourceUser(destUser.getPort());
+			PeykUser sourceUser = PeykUser.getSourceUser();
 			sourceUser.setMessage(destUser.getMessage());
 			out.writeObject(sourceUser);
 
@@ -70,7 +70,7 @@ public class PeykMessage {
 
 			String host = server.toString().split("=")[1].split(",port")[0]
 					.substring(1);
-			peykUser = new PeykUser(host, port);
+			peykUser = new PeykUser(host);
 			PeykUser receivedUser = (PeykUser) inputObj;
 			peykUser.setName(receivedUser.getName());
 			peykUser.setMessage(receivedUser.getMessage());

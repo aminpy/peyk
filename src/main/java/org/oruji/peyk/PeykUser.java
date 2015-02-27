@@ -11,33 +11,23 @@ import java.net.UnknownHostException;
 public final class PeykUser implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String host;
-	private int port;
+	private final int port = 8180;
 	private String name;
 	private String message;
 	private static PeykUser sourceUser = null;
 
-	public static PeykUser getSourceUser(int port) {
+	public static PeykUser getSourceUser() {
 		if (sourceUser != null)
 			return sourceUser;
 
-		sourceUser = new PeykUser();
-		sourceUser.setHost(OnlineBroadCast.getMyAddress());
-		sourceUser.setPort(port);
+		sourceUser = new PeykUser(OnlineBroadCast.getMyAddress());
 		sourceUser.setName(System.getProperty("user.name"));
 
 		return sourceUser;
 	}
 
-	public PeykUser() {
-	}
-
-	public PeykUser(int port) {
-		this.port = port;
-	}
-
-	public PeykUser(String host, int port) {
+	public PeykUser(String host) {
 		this.host = host;
-		this.port = port;
 	}
 
 	public String getHost() {
@@ -58,10 +48,6 @@ public final class PeykUser implements Serializable {
 
 	public void setHost(String host) {
 		this.host = host;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
 	}
 
 	public String getMessage() {
@@ -123,7 +109,7 @@ public final class PeykUser implements Serializable {
 
 	@Override
 	public String toString() {
-		return name + " " + host;
+		return name + " - " + host;
 	};
 
 	public String toStringUnique() {

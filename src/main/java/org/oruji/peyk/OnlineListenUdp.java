@@ -14,11 +14,9 @@ import org.apache.log4j.Logger;
 public class OnlineListenUdp implements Runnable {
 	Logger log = Logger.getLogger(OnlineListenUdp.class.getName());
 
-	private int port;
 	private Set<PeykUser> peykUsers = new CopyOnWriteArraySet<PeykUser>();
 
-	public OnlineListenUdp(int port, Set<PeykUser> peykUsers) {
-		this.port = port;
+	public OnlineListenUdp(Set<PeykUser> peykUsers) {
 		this.peykUsers = peykUsers;
 	}
 
@@ -26,7 +24,8 @@ public class OnlineListenUdp implements Runnable {
 		DatagramSocket datagramSocket = null;
 		while (true) {
 			try {
-				datagramSocket = new DatagramSocket(port);
+				datagramSocket = new DatagramSocket(PeykUser.getSourceUser()
+						.getPort());
 				datagramSocket.setBroadcast(true);
 
 				byte[] buffer = new byte[15000];
