@@ -14,13 +14,11 @@ public final class PeykUser implements Serializable {
 	private int port;
 	private String name;
 
-	@SuppressWarnings("unused")
-	private PeykUser() {
+	public PeykUser() {
 	}
 
 	public PeykUser(int port) {
 		this.port = port;
-		this.host = "127.0.0.1";
 	}
 
 	public PeykUser(String host, int port) {

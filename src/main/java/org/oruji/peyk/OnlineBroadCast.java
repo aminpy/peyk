@@ -20,14 +20,13 @@ import org.apache.log4j.Logger;
 public class OnlineBroadCast implements Runnable {
 	Logger log = Logger.getLogger(OnlineBroadCast.class.getName());
 
+	PeykUser serverUser = new PeykUser();
 	Set<PeykUser> onlineUsers = new CopyOnWriteArraySet<PeykUser>();
 	Set<PeykUser> tempUsers = new CopyOnWriteArraySet<PeykUser>();
 
-	private int port;
-
-	public OnlineBroadCast(int port, Set<PeykUser> onlineUsers,
+	public OnlineBroadCast(PeykUser serverUser, Set<PeykUser> onlineUsers,
 			Set<PeykUser> tempUsers) {
-		this.port = port;
+		this.serverUser = serverUser;
 		this.onlineUsers = onlineUsers;
 		this.tempUsers = tempUsers;
 	}
@@ -40,9 +39,7 @@ public class OnlineBroadCast implements Runnable {
 				datagramSocket = new DatagramSocket();
 				datagramSocket.setBroadcast(true);
 
-				PeykUser user = new PeykUser(getMyAddress(), port);
-
-				byte[] sendData = serialize(user);
+				byte[] sendData = serialize(serverUser);
 
 				Enumeration<NetworkInterface> interfaces = NetworkInterface
 						.getNetworkInterfaces();
@@ -63,7 +60,8 @@ public class OnlineBroadCast implements Runnable {
 
 						log.info("broadcast: " + broadcast);
 						DatagramPacket packet = new DatagramPacket(sendData,
-								sendData.length, broadcast, port);
+								sendData.length, broadcast,
+								serverUser.getPort());
 						datagramSocket.send(packet);
 					}
 				}
