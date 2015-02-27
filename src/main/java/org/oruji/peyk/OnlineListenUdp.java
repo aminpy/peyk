@@ -37,9 +37,10 @@ public class OnlineListenUdp implements Runnable {
 
 				if (obj instanceof PeykUser) {
 					PeykUser peykUser = (PeykUser) obj;
-					log.info("server UDP: " + peykUser);
-
-					peykUsers.add(peykUser);
+					if (!peykUser.equals(PeykUser.getSourceUser())) {
+						log.info("Received UDP from: " + peykUser);
+						peykUsers.add(peykUser);
+					}
 				}
 
 			} catch (SocketException e) {
