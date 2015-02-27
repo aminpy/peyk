@@ -73,7 +73,8 @@ public class ChatFrame extends JFrame {
 						.getText() : histArea.getText() + "\n"
 						+ inputArea.getText());
 
-				sendMessage(peykUser, inputArea.getText());
+				peykUser.setMessage(inputArea.getText());
+				sendMessage(peykUser);
 
 				inputArea.setText("");
 			}
@@ -109,7 +110,7 @@ public class ChatFrame extends JFrame {
 		return peykUser.toStringUnique();
 	}
 
-	public void sendMessage(PeykUser user, String text) {
+	public void sendMessage(PeykUser user) {
 		Socket client = null;
 		OutputStream outToServer = null;
 		ObjectOutputStream out = null;
@@ -118,7 +119,7 @@ public class ChatFrame extends JFrame {
 			client = new Socket(user.getHost(), user.getPort());
 			outToServer = client.getOutputStream();
 			out = new ObjectOutputStream(outToServer);
-			out.writeObject(text);
+			out.writeObject(user.getMessage());
 
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();

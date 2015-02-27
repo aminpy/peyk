@@ -13,6 +13,7 @@ public final class PeykUser implements Serializable {
 	private String host;
 	private int port;
 	private String name;
+	private String message;
 
 	public PeykUser() {
 	}
@@ -48,6 +49,14 @@ public final class PeykUser implements Serializable {
 
 	public void setPort(int port) {
 		this.port = port;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public boolean isOnline() {
