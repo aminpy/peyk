@@ -21,15 +21,16 @@ import javax.swing.text.DefaultCaret;
 
 public class ChatFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private JTextArea histArea = null;
+
+	private JTextArea chatPanel = null;
 	private final PeykUser destUser;
 	private static Set<ChatFrame> chatFrames = new HashSet<ChatFrame>();
 
 	public static ChatFrame getChatFrame(PeykUser destUser) {
-		for (ChatFrame cf : chatFrames) {
-			if (cf.toString().equals(destUser.toStringUnique())) {
-				cf.setVisible(true);
-				return cf;
+		for (ChatFrame chatFrame : chatFrames) {
+			if (chatFrame.toString().equals(destUser.toStringUnique())) {
+				chatFrame.setVisible(true);
+				return chatFrame;
 			}
 		}
 
@@ -57,23 +58,23 @@ public class ChatFrame extends JFrame {
 		add(controlPanel);
 
 		final JTextField inputArea = new JTextField(40);
-		histArea = new JTextArea(10, 50);
-		histArea.setEditable(false);
+		chatPanel = new JTextArea(10, 50);
+
 		JScrollPane scrollPane = new JScrollPane(inputArea);
-		JScrollPane scrollPane2 = new JScrollPane(histArea);
+		JScrollPane scrollPane2 = new JScrollPane(chatPanel);
 		JButton showButton = new JButton("Send");
 
 		showButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				histArea.setText(histArea.getText().equals("") ? "me: "
-						+ inputArea.getText() : histArea.getText() + "\n"
-						+ "me: " + inputArea.getText());
-
 				PeykMessage peykMessage = new PeykMessage();
 				peykMessage.setSendDate(new Date());
 				peykMessage.setText(inputArea.getText());
 				peykMessage.setSender(PeykUser.getSourceUser());
 				peykMessage.setReceiver(destUser);
+
+				String text = peykMessage.sendFormat();
+
+				appendText(text);
 
 				PeykMessage.sendMessage(peykMessage);
 
@@ -88,22 +89,18 @@ public class ChatFrame extends JFrame {
 		JRootPane rootPane = getRootPane();
 		rootPane.setDefaultButton(showButton);
 
-		DefaultCaret caret = (DefaultCaret) histArea.getCaret();
+		DefaultCaret caret = (DefaultCaret) chatPanel.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
-		histArea.setFocusable(false);
+		chatPanel.setFocusable(false);
 
 		setResizable(false);
 		setVisible(true);
 	}
 
 	public void appendText(String text) {
-		if (histArea == null)
-			histArea = new JTextArea(10, 50);
-
-		histArea.setText(histArea.getText().equals("") ? text : histArea
+		chatPanel.setText(chatPanel.getText().equals("") ? text : chatPanel
 				.getText() + "\n" + text);
-
 	}
 
 	@Override

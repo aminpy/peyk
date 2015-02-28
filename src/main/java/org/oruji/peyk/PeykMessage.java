@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -188,5 +189,26 @@ public class PeykMessage implements Serializable {
 		} else if (!text.equals(other.text))
 			return false;
 		return true;
+	}
+
+	public String sendFormat() {
+		StringBuilder formatedText = new StringBuilder();
+		formatedText.append("me");
+		formatedText.append(" - ");
+		formatedText.append(new SimpleDateFormat("HH:mm:ss: ").format(sendDate));
+		formatedText.append(text);
+
+		return formatedText.toString();
+	}
+
+	public String receiveFormat() {
+		StringBuilder formatedText = new StringBuilder();
+		formatedText.append(sender.getName());
+		formatedText.append(" - ");
+		formatedText.append(new SimpleDateFormat("HH:mm:ss").format(receiveDate));
+		formatedText.append(": ");
+		formatedText.append(text);
+
+		return formatedText.toString();
 	}
 }

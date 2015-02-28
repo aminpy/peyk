@@ -15,8 +15,7 @@ public class GreetingServer implements Runnable {
 
 			ChatFrame chatFrame = ChatFrame.getChatFrame(message.getSender());
 
-			chatFrame.appendText(message.getSender().getName() + ": "
-					+ message.getText());
+			chatFrame.appendText(message.receiveFormat());
 		}
 	}
 
