@@ -1,28 +1,36 @@
 package org.oruji.peyk;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JButton;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
 
 public class ChatFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	private JTextArea chatPanel = null;
+	private JEditorPane chatPanel = null;
+	private HTMLDocument doc = null;
+	private HTMLEditorKit kit = null;
+
 	private final PeykUser destUser;
 	private static Set<ChatFrame> chatFrames = new HashSet<ChatFrame>();
 
@@ -46,6 +54,9 @@ public class ChatFrame extends JFrame {
 		setSize(600, 300);
 		setLayout(new GridLayout(1, 1));
 
+		doc = new HTMLDocument();
+		kit = new HTMLEditorKit();
+
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent) {
 				setVisible(false);
@@ -58,10 +69,12 @@ public class ChatFrame extends JFrame {
 		add(controlPanel);
 
 		final JTextField inputArea = new JTextField(40);
-		chatPanel = new JTextArea(10, 50);
+		chatPanel = new JEditorPane();
+		Dimension preferred = new Dimension(550, 200);
+		chatPanel.setPreferredSize(preferred);
+		chatPanel.setContentType("text/html");
 
-		JScrollPane scrollPane = new JScrollPane(inputArea);
-		JScrollPane scrollPane2 = new JScrollPane(chatPanel);
+		JScrollPane scroll = new JScrollPane(chatPanel);
 		JButton showButton = new JButton("Send");
 
 		showButton.addActionListener(new ActionListener() {
@@ -82,8 +95,8 @@ public class ChatFrame extends JFrame {
 			}
 		});
 
-		controlPanel.add(scrollPane2);
-		controlPanel.add(scrollPane);
+		controlPanel.add(scroll);
+		controlPanel.add(inputArea);
 		controlPanel.add(showButton);
 
 		JRootPane rootPane = getRootPane();
@@ -94,13 +107,21 @@ public class ChatFrame extends JFrame {
 
 		chatPanel.setFocusable(false);
 
-		setResizable(false);
+		setResizable(true);
 		setVisible(true);
 	}
 
 	public void appendText(String text) {
-		chatPanel.setText(chatPanel.getText().equals("") ? text : chatPanel
-				.getText() + "\n" + text);
+		try {
+			chatPanel.setEditorKit(kit);
+			chatPanel.setDocument(doc);
+			kit.insertHTML(doc, doc.getLength(), text, 0, 0, null);
+
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
