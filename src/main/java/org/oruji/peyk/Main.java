@@ -7,9 +7,10 @@ public class Main {
 	public static void main(String[] args) {
 		Set<PeykUser> tempUsers = new CopyOnWriteArraySet<PeykUser>();
 
-		new GreetingServer().start();
 		new OnlineListenUdp(tempUsers).start();
 		new OnlineBroadCast(tempUsers).start();
+
+		new GreetingServer().start();
 		new PeykFrame();
 	}
 }
