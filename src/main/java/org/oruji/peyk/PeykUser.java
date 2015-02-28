@@ -1,12 +1,8 @@
 package org.oruji.peyk;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public final class PeykUser implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -15,6 +11,7 @@ public final class PeykUser implements Serializable {
 	private String name;
 	private String message;
 	private static PeykUser sourceUser = null;
+	private Set<PeykUser> friendsList = new CopyOnWriteArraySet<PeykUser>();
 
 	public static PeykUser getSourceUser() {
 		if (sourceUser != null)
@@ -58,34 +55,12 @@ public final class PeykUser implements Serializable {
 		this.message = message;
 	}
 
-	public boolean isOnline() {
-		ObjectOutputStream outputStream = null;
-		Socket socket = null;
-		OutputStream out = null;
-		try {
-			socket = new Socket();
-			socket.connect(new InetSocketAddress(host, port), 6);
-			out = socket.getOutputStream();
-			outputStream = new ObjectOutputStream(out);
-			outputStream.writeObject(this);
-		} catch (UnknownHostException e) {
-			return false;
-		} catch (IOException e) {
-			return false;
-		} finally {
-			try {
-				if (socket != null)
-					socket.close();
-				if (out != null)
-					out.close();
-				if (outputStream != null)
-					outputStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	public Set<PeykUser> getFriendsList() {
+		return friendsList;
+	}
 
-		return true;
+	public void setFriendsList(Set<PeykUser> friendsList) {
+		this.friendsList = friendsList;
 	}
 
 	@Override

@@ -20,11 +20,9 @@ import org.apache.log4j.Logger;
 public class OnlineBroadCast implements Runnable {
 	Logger log = Logger.getLogger(OnlineBroadCast.class.getName());
 
-	Set<PeykUser> onlineUsers = new CopyOnWriteArraySet<PeykUser>();
 	Set<PeykUser> tempUsers = new CopyOnWriteArraySet<PeykUser>();
 
-	public OnlineBroadCast(Set<PeykUser> onlineUsers, Set<PeykUser> tempUsers) {
-		this.onlineUsers = onlineUsers;
+	public OnlineBroadCast(Set<PeykUser> tempUsers) {
 		this.tempUsers = tempUsers;
 	}
 
@@ -74,10 +72,11 @@ public class OnlineBroadCast implements Runnable {
 			}
 
 			try {
-				onlineUsers.clear();
-				onlineUsers.addAll(tempUsers);
+				PeykUser sourceUser = PeykUser.getSourceUser();
+
+				sourceUser.getFriendsList().clear();
+				sourceUser.getFriendsList().addAll(tempUsers);
 				tempUsers.clear();
-				System.out.println(onlineUsers);
 				Thread.sleep(3000);
 
 			} catch (InterruptedException e) {

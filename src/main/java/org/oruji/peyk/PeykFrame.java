@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -19,15 +18,16 @@ public class PeykFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final String TITLE = "Peyk Messenger";
 
-	public PeykFrame(final Set<PeykUser> onlineUsers) {
-		setTitle(TITLE + " - " + PeykUser.getSourceUser().getName());
+	public PeykFrame() {
+		final PeykUser sourceUser = PeykUser.getSourceUser();
+		setTitle(TITLE + " - " + sourceUser.getName());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		final JList<PeykUser> userJList = new JList<PeykUser>();
 		final JTextField text = new JTextField(15);
 
-		PeykUser[] onlineArray = onlineUsers.toArray(new PeykUser[onlineUsers
-				.size()]);
+		PeykUser[] onlineArray = sourceUser.getFriendsList().toArray(
+				new PeykUser[sourceUser.getFriendsList().size()]);
 
 		userJList.setListData(onlineArray);
 		userJList.setSelectedIndex(0);
@@ -76,8 +76,8 @@ public class PeykFrame extends JFrame {
 
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				userJList.setListData(onlineUsers
-						.toArray(new PeykUser[onlineUsers.size()]));
+				userJList.setListData(sourceUser.getFriendsList().toArray(
+						new PeykUser[sourceUser.getFriendsList().size()]));
 				setTitle(TITLE + " - " + PeykUser.getSourceUser().getName());
 
 			}
