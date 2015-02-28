@@ -9,7 +9,6 @@ public final class PeykUser implements Serializable {
 	private String host;
 	private final int port = 8180;
 	private String name;
-	private String message;
 	private static PeykUser sourceUser = null;
 	private Set<PeykUser> friendsList = new CopyOnWriteArraySet<PeykUser>();
 
@@ -45,14 +44,6 @@ public final class PeykUser implements Serializable {
 
 	public void setHost(String host) {
 		this.host = host;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	public Set<PeykUser> getFriendsList() {

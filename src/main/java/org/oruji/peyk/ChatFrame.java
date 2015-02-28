@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -68,8 +69,13 @@ public class ChatFrame extends JFrame {
 						+ inputArea.getText() : histArea.getText() + "\n"
 						+ "me: " + inputArea.getText());
 
-				destUser.setMessage(inputArea.getText());
-				PeykMessage.sendMessage(destUser);
+				PeykMessage peykMessage = new PeykMessage();
+				peykMessage.setSendDate(new Date());
+				peykMessage.setText(inputArea.getText());
+				peykMessage.setSender(PeykUser.getSourceUser());
+				peykMessage.setReceiver(destUser);
+
+				PeykMessage.sendMessage(peykMessage);
 
 				inputArea.setText("");
 			}

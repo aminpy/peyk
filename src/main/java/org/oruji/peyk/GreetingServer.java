@@ -7,15 +7,16 @@ public class GreetingServer implements Runnable {
 
 	public void run() {
 		while (true) {
-			PeykUser destUser = PeykMessage.receiveMessage(PeykUser.getSourceUser().getPort());
+			PeykMessage message = PeykMessage.receiveMessage(PeykUser
+					.getSourceUser().getPort());
 
-			if (destUser == null)
+			if (message == null)
 				continue;
 
-			ChatFrame chatFrame = ChatFrame.getChatFrame(destUser);
+			ChatFrame chatFrame = ChatFrame.getChatFrame(message.getSender());
 
-			chatFrame.appendText(destUser.getName() + ": "
-					+ destUser.getMessage());
+			chatFrame.appendText(message.getSender().getName() + ": "
+					+ message.getText());
 		}
 	}
 
