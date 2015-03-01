@@ -13,12 +13,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLDocument;
@@ -27,7 +27,7 @@ import javax.swing.text.html.HTMLEditorKit;
 public class ChatFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	private JEditorPane chatPanel = null;
+	private JTextPane chatPanel = null;
 	private HTMLDocument doc = null;
 	private HTMLEditorKit kit = null;
 
@@ -38,6 +38,7 @@ public class ChatFrame extends JFrame {
 		for (ChatFrame chatFrame : chatFrames) {
 			if (chatFrame.toString().equals(destUser.toStringUnique())) {
 				chatFrame.setVisible(true);
+
 				return chatFrame;
 			}
 		}
@@ -69,7 +70,7 @@ public class ChatFrame extends JFrame {
 		add(controlPanel);
 
 		final JTextField inputArea = new JTextField(40);
-		chatPanel = new JEditorPane();
+		chatPanel = new JTextPane();
 		Dimension preferred = new Dimension(550, 200);
 		chatPanel.setPreferredSize(preferred);
 		chatPanel.setMaximumSize(preferred);
