@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -18,10 +20,25 @@ public class PeykFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final String TITLE = "Peyk Messenger";
 
-	public PeykFrame() {
+	private static PeykFrame peykFrame = null;
+
+	public static PeykFrame getFrame() {
+		if (peykFrame == null) {
+			peykFrame = new PeykFrame();
+		}
+
+		return peykFrame;
+	}
+
+	private PeykFrame() {
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent windowEvent) {
+				setVisible(false);
+			}
+		});
+
 		final PeykUser sourceUser = PeykUser.getSourceUser();
 		setTitle(TITLE + " - " + sourceUser.getName());
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		final JList<PeykUser> userJList = new JList<PeykUser>();
 		final JTextField text = new JTextField(15);
