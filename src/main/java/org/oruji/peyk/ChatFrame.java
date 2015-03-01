@@ -72,9 +72,12 @@ public class ChatFrame extends JFrame {
 		chatPanel = new JEditorPane();
 		Dimension preferred = new Dimension(550, 200);
 		chatPanel.setPreferredSize(preferred);
+		chatPanel.setMaximumSize(preferred);
 		chatPanel.setContentType("text/html");
 
 		JScrollPane scroll = new JScrollPane(chatPanel);
+		scroll.setPreferredSize(preferred);
+		scroll.setMaximumSize(preferred);
 		JButton showButton = new JButton("Send");
 
 		showButton.addActionListener(new ActionListener() {
@@ -107,7 +110,7 @@ public class ChatFrame extends JFrame {
 
 		chatPanel.setFocusable(false);
 
-		setResizable(true);
+		setResizable(false);
 		setVisible(true);
 	}
 
