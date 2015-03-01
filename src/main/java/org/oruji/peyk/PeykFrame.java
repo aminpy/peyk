@@ -25,6 +25,7 @@ public class PeykFrame extends JFrame {
 
 		final JList<PeykUser> userJList = new JList<PeykUser>();
 		final JTextField text = new JTextField(15);
+		text.setText(System.getProperty("user.name"));
 
 		PeykUser[] onlineArray = sourceUser.getFriendsList().toArray(
 				new PeykUser[sourceUser.getFriendsList().size()]);
@@ -50,11 +51,12 @@ public class PeykFrame extends JFrame {
 		text.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String content = text.getText().trim();
-				if (content.equals(""))
+				if (content.equals("")) {
 					PeykUser.getSourceUser().setName(
 							System.getProperty("user.name"));
+					text.setText(System.getProperty("user.name"));
 
-				else
+				} else
 					PeykUser.getSourceUser().setName(text.getText());
 
 				text.transferFocus();
@@ -90,5 +92,6 @@ public class PeykFrame extends JFrame {
 		setSize(300, 650);
 		setResizable(true);
 		setVisible(true);
+		text.transferFocus();
 	}
 }
