@@ -1,8 +1,6 @@
 package org.oruji.peyk;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -20,7 +18,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultCaret;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
@@ -30,9 +27,14 @@ public class ChatFrame extends JFrame {
 	private JTextPane chatPanel = null;
 	private HTMLDocument doc = null;
 	private HTMLEditorKit kit = null;
+	private JPanel panel = null;
+	public JScrollPane scroll = null;
+
+	private static Set<ChatFrame> chatFrames = new HashSet<ChatFrame>();
 
 	private final PeykUser destUser;
-	private static Set<ChatFrame> chatFrames = new HashSet<ChatFrame>();
+
+	private final Dimension CHAT_SIZE = new Dimension(550, 200);
 
 	public static ChatFrame getChatFrame(PeykUser destUser) {
 		for (ChatFrame chatFrame : chatFrames) {
@@ -50,35 +52,31 @@ public class ChatFrame extends JFrame {
 	}
 
 	private ChatFrame(final PeykUser destUser) {
-		this.destUser = destUser;
-		setTitle(destUser.toString());
-		setSize(600, 300);
-		setLayout(new GridLayout(1, 1));
-
-		doc = new HTMLDocument();
-		kit = new HTMLEditorKit();
-
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent) {
 				setVisible(false);
 			}
 		});
 
-		JPanel controlPanel = new JPanel();
-		controlPanel.setLayout(new FlowLayout());
+		this.destUser = destUser;
 
-		add(controlPanel);
+		setTitle(destUser.toString());
+		setSize(600, 300);
+
+		doc = new HTMLDocument();
+		kit = new HTMLEditorKit();
 
 		final JTextField inputArea = new JTextField(40);
 		chatPanel = new JTextPane();
-		Dimension preferred = new Dimension(550, 200);
-		chatPanel.setPreferredSize(preferred);
-		chatPanel.setMaximumSize(preferred);
+		chatPanel.setFocusable(false);
+		chatPanel.setPreferredSize(CHAT_SIZE);
+		chatPanel.setMaximumSize(CHAT_SIZE);
 		chatPanel.setContentType("text/html");
 
-		JScrollPane scroll = new JScrollPane(chatPanel);
-		scroll.setPreferredSize(preferred);
-		scroll.setMaximumSize(preferred);
+		scroll = new JScrollPane(chatPanel);
+		scroll.setPreferredSize(CHAT_SIZE);
+		scroll.setMaximumSize(CHAT_SIZE);
+
 		JButton showButton = new JButton("Send");
 
 		showButton.addActionListener(new ActionListener() {
@@ -99,17 +97,14 @@ public class ChatFrame extends JFrame {
 			}
 		});
 
-		controlPanel.add(scroll);
-		controlPanel.add(inputArea);
-		controlPanel.add(showButton);
+		panel = new JPanel();
+		setContentPane(panel);
+		panel.add(scroll);
+		panel.add(inputArea);
+		panel.add(showButton);
 
 		JRootPane rootPane = getRootPane();
 		rootPane.setDefaultButton(showButton);
-
-		DefaultCaret caret = (DefaultCaret) chatPanel.getCaret();
-		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-
-		chatPanel.setFocusable(false);
 
 		setResizable(false);
 		setVisible(true);
@@ -119,10 +114,15 @@ public class ChatFrame extends JFrame {
 		try {
 			chatPanel.setEditorKit(kit);
 			chatPanel.setDocument(doc);
+
+			// auto scrolling
+			chatPanel.setCaretPosition(chatPanel.getDocument().getLength());
+
 			kit.insertHTML(doc, doc.getLength(), text, 0, 0, null);
 
 		} catch (BadLocationException e) {
 			e.printStackTrace();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
