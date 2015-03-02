@@ -8,9 +8,8 @@ import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
@@ -37,11 +36,9 @@ public final class PeykTray {
 
 		PopupMenu popup = new PopupMenu();
 		try {
-			ClassLoader classLoader = getClass().getClassLoader();
-			File file = new File(classLoader.getResource("peyk.png").getFile());
-
-			trayIcon = new TrayIcon(ImageIO.read(file).getScaledInstance(32,
-					32, Image.SCALE_SMOOTH), null);
+			InputStream in = getClass().getResourceAsStream("/peyk.png");
+			trayIcon = new TrayIcon(ImageIO.read(in).getScaledInstance(32, 32,
+					Image.SCALE_SMOOTH), null);
 
 		} catch (IOException e1) {
 			e1.printStackTrace();
