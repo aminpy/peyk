@@ -8,7 +8,7 @@ public class Main {
 		Set<PeykUser> tempUsers = new CopyOnWriteArraySet<PeykUser>();
 
 		PeykTray.getTray();
-		
+
 		new OnlineListenUdp(tempUsers).start();
 		new OnlineBroadCast(tempUsers).start();
 
