@@ -127,7 +127,7 @@ public final class PeykUser implements Serializable {
 		return out.toByteArray();
 	}
 
-	public static PeykUser deserialize(byte[] data) {
+	public synchronized static PeykUser deserialize(byte[] data) {
 		ByteArrayInputStream in = null;
 		ObjectInputStream is = null;
 		PeykUser user = null;
