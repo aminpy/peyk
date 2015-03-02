@@ -117,9 +117,9 @@ public class ChatFrame extends JFrame {
 
 			// auto scrolling
 			chatPanel.setCaretPosition(chatPanel.getDocument().getLength());
-
-			kit.insertHTML(doc, doc.getLength(), TextFormatter.emoticons(text),
-					0, 0, null);
+			text = TextFormatter.buildStr(text);
+			text = TextFormatter.emoticons(text);
+			kit.insertHTML(doc, doc.getLength(), text, 0, 0, null);
 			System.out.println(TextFormatter.emoticons(text));
 
 		} catch (BadLocationException e) {

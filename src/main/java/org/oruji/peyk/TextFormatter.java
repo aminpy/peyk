@@ -1,17 +1,16 @@
 package org.oruji.peyk;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 public class TextFormatter {
 
 	private final static Map<String, String> emoticonMap = new TreeMap<String, String>() {
 		{
-			put(">:D<", "baghal");
+			put("&gt;:D&lt;", "baghal");
 			put(":))", "laugh");
 			put(":((", "cry");
 			put(":)", "1");
@@ -19,9 +18,9 @@ public class TextFormatter {
 			put(":D", "3");
 			put(":-h", "bye");
 			put("(:|", "khamyaze");
-			put("8->", "rolleyes");
+			put("8-&gt;", "rolleyes");
 			put("B-)", "shades");
-			put(":\">", "shy");
+			put(":\"&gt;", "shy");
 			put(":-\"", "soot");
 			put(":x", "love");
 			put(":o", "taajjob");
@@ -45,6 +44,11 @@ public class TextFormatter {
 					+ myPath + "\" />");
 		}
 
+		return text;
+	}
+
+	public static String buildStr(String text) {
+		text = text.replaceAll(">", "&gt;").replace("<", "&lt;");
 		return text;
 	}
 }
