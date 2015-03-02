@@ -2,6 +2,7 @@ package org.oruji.peyk;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,8 +16,11 @@ import java.util.Enumeration;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.apache.log4j.Logger;
+
 public final class PeykUser implements Serializable {
 	private static final long serialVersionUID = 1L;
+	static Logger log = Logger.getLogger(PeykUser.class.getName());
 
 	private String name;
 	private String host;
@@ -139,7 +143,11 @@ public final class PeykUser implements Serializable {
 				user = (PeykUser) obj;
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			if (e instanceof EOFException) {
+				log.error("Deserialize EOFException");
+			} else {
+				e.printStackTrace();
+			}
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
