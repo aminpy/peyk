@@ -12,10 +12,10 @@ import org.apache.log4j.Logger;
 public class OnlineListenUdp implements Runnable {
 	Logger log = Logger.getLogger(OnlineListenUdp.class.getName());
 
-	private Set<PeykUser> peykUsers = new CopyOnWriteArraySet<PeykUser>();
+	private Set<PeykUser> tempUsers = new CopyOnWriteArraySet<PeykUser>();
 
-	public OnlineListenUdp(Set<PeykUser> peykUsers) {
-		this.peykUsers = peykUsers;
+	public OnlineListenUdp(Set<PeykUser> tempUsers) {
+		this.tempUsers = tempUsers;
 	}
 
 	public void run() {
@@ -40,7 +40,7 @@ public class OnlineListenUdp implements Runnable {
 				} else {
 					if (!peykUser.equals(sourceUser)) {
 						log.info("Received UDP from: " + peykUser);
-						peykUsers.add(peykUser);
+						tempUsers.add(peykUser);
 					}
 				}
 
