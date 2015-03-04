@@ -39,6 +39,10 @@ public class OnlineBroadCast implements Runnable {
 				while (interfaces.hasMoreElements()) {
 					NetworkInterface netInter = interfaces.nextElement();
 
+					if (!netInter.getName().equals("wlan0")
+							&& !netInter.getName().equals("eth0"))
+						continue;
+
 					if (netInter.isLoopback() || !netInter.isUp()) {
 						continue;
 					}
