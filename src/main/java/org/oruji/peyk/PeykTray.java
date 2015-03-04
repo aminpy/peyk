@@ -31,6 +31,7 @@ public final class PeykTray {
 		// Check the SystemTray is supported
 		if (!SystemTray.isSupported()) {
 			System.out.println("SystemTray is not supported");
+
 			return;
 		}
 
@@ -73,6 +74,7 @@ public final class PeykTray {
 
 		try {
 			tray.add(trayIcon);
+
 		} catch (AWTException e) {
 			e.printStackTrace();
 		}

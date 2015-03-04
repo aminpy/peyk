@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -38,19 +36,12 @@ public class OnlineBroadCast implements Runnable {
 								.getPort());
 				datagramSocket.send(packet);
 
-			} catch (SocketException e) {
-				e.printStackTrace();
-
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
 			try {
 				PeykUser sourceUser = PeykUser.getSourceUser();
-
 				sourceUser.getFriendsList().clear();
 				sourceUser.getFriendsList().addAll(tempUsers);
 				tempUsers.clear();

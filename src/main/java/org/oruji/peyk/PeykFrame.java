@@ -72,6 +72,7 @@ public class PeykFrame extends JFrame {
 		text.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String content = text.getText().trim();
+
 				if (content.equals("")) {
 					PeykUser.getSourceUser().setName(
 							System.getProperty("user.name"));

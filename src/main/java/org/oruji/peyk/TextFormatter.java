@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 public class TextFormatter {
 
 	private final static Map<String, String> emoticonMap = new TreeMap<String, String>() {
+		private static final long serialVersionUID = 1L;
+
 		{
 			put("&gt;:D&lt;", "baghal");
 			put(":))", "laugh");

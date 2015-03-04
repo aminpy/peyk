@@ -118,9 +118,6 @@ public class PeykMessage implements Serializable {
 			in = new ObjectInputStream(inputStream);
 			Object inputObj = in.readObject();
 
-			// String host = server.toString().split("=")[1].split(",port")[0]
-			// .substring(1);
-
 			if (inputObj instanceof PeykMessage) {
 				message = (PeykMessage) inputObj;
 				message.setReceiveDate(new Date());
@@ -161,6 +158,7 @@ public class PeykMessage implements Serializable {
 				+ ((sendDate == null) ? 0 : sendDate.hashCode());
 		result = prime * result + ((sender == null) ? 0 : sender.hashCode());
 		result = prime * result + ((text == null) ? 0 : text.hashCode());
+
 		return result;
 	}
 
@@ -168,26 +166,35 @@ public class PeykMessage implements Serializable {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
+
 		if (obj == null)
 			return false;
+
 		if (getClass() != obj.getClass())
 			return false;
+
 		PeykMessage other = (PeykMessage) obj;
 		if (sendDate == null) {
 			if (other.sendDate != null)
 				return false;
+
 		} else if (!sendDate.equals(other.sendDate))
 			return false;
+
 		if (sender == null) {
 			if (other.sender != null)
 				return false;
+
 		} else if (!sender.equals(other.sender))
 			return false;
+
 		if (text == null) {
 			if (other.text != null)
 				return false;
+
 		} else if (!text.equals(other.text))
 			return false;
+
 		return true;
 	}
 
@@ -195,7 +202,8 @@ public class PeykMessage implements Serializable {
 		StringBuilder formatedText = new StringBuilder();
 		formatedText.append("me");
 		formatedText.append(" - ");
-		formatedText.append(new SimpleDateFormat("HH:mm:ss: ").format(sendDate));
+		formatedText
+				.append(new SimpleDateFormat("HH:mm:ss: ").format(sendDate));
 		formatedText.append(text);
 
 		return formatedText.toString();
@@ -205,7 +213,8 @@ public class PeykMessage implements Serializable {
 		StringBuilder formatedText = new StringBuilder();
 		formatedText.append(sender.getName());
 		formatedText.append(" - ");
-		formatedText.append(new SimpleDateFormat("HH:mm:ss").format(receiveDate));
+		formatedText.append(new SimpleDateFormat("HH:mm:ss")
+				.format(receiveDate));
 		formatedText.append(": ");
 		formatedText.append(text);
 

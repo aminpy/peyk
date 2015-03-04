@@ -20,6 +20,7 @@ public class OnlineListenUdp implements Runnable {
 
 	public void run() {
 		DatagramSocket datagramSocket = null;
+
 		while (true) {
 			try {
 				datagramSocket = new DatagramSocket(PeykUser.getSourceUser()
@@ -35,6 +36,7 @@ public class OnlineListenUdp implements Runnable {
 
 				if (peykUser == null) {
 					log.error("Listen UDP: deserialized peykUser is null !!!");
+
 				} else {
 					if (!peykUser.equals(PeykUser.getSourceUser())) {
 						log.info("Received UDP from: " + peykUser);

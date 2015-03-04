@@ -145,6 +145,7 @@ public final class PeykUser implements Serializable {
 		} catch (IOException e) {
 			if (e instanceof EOFException) {
 				log.error("Deserialize EOFException");
+
 			} else {
 				e.printStackTrace();
 			}
