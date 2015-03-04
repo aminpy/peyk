@@ -169,8 +169,35 @@ public final class PeykUser implements Serializable {
 	}
 
 	private static String getMyAddress() {
-		Enumeration<NetworkInterface> interfaces;
 		String myAddress = null;
+
+		for (InterfaceAddress interAdd : getMyNetworkInetface()
+				.getInterfaceAddresses()) {
+
+			if (interAdd.getAddress() instanceof Inet6Address)
+				continue;
+
+			InetAddress address = interAdd.getAddress();
+			myAddress = address.toString().substring(1);
+		}
+
+		return myAddress;
+	}
+
+	public static InetAddress getMyBroadcast() {
+		InetAddress broadcast = null;
+
+		for (InterfaceAddress interAdd : PeykUser.getMyNetworkInetface()
+				.getInterfaceAddresses()) {
+			broadcast = interAdd.getBroadcast();
+		}
+
+		return broadcast;
+	}
+
+	public static NetworkInterface getMyNetworkInetface() {
+		Enumeration<NetworkInterface> interfaces;
+
 		try {
 			interfaces = NetworkInterface.getNetworkInterfaces();
 
@@ -185,22 +212,13 @@ public final class PeykUser implements Serializable {
 					continue;
 				}
 
-				for (InterfaceAddress interAdd : netInter
-						.getInterfaceAddresses()) {
-
-					if (interAdd.getAddress() instanceof Inet6Address)
-						continue;
-
-					InetAddress address = interAdd.getAddress();
-					myAddress = address.toString().substring(1);
-				}
+				return netInter;
 			}
 
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
 
-		return myAddress;
+		return null;
 	}
-
 }

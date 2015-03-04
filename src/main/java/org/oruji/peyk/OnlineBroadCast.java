@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.InterfaceAddress;
-import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Enumeration;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -33,34 +30,13 @@ public class OnlineBroadCast implements Runnable {
 
 				byte[] sendData = PeykUser.getSourceUser().serialize();
 
-				Enumeration<NetworkInterface> interfaces = NetworkInterface
-						.getNetworkInterfaces();
+				InetAddress broadcast = PeykUser.getMyBroadcast();
 
-				while (interfaces.hasMoreElements()) {
-					NetworkInterface netInter = interfaces.nextElement();
-
-					if (!netInter.getName().equals("wlan0")
-							&& !netInter.getName().equals("eth0"))
-						continue;
-
-					if (netInter.isLoopback() || !netInter.isUp()) {
-						continue;
-					}
-
-					for (InterfaceAddress interAdd : netInter
-							.getInterfaceAddresses()) {
-						InetAddress broadcast = interAdd.getBroadcast();
-
-						if (broadcast == null)
-							continue;
-
-						log.info("broadcast: " + broadcast);
-						DatagramPacket packet = new DatagramPacket(sendData,
-								sendData.length, broadcast, PeykUser
-										.getSourceUser().getPort());
-						datagramSocket.send(packet);
-					}
-				}
+				log.info("broadcast: " + broadcast);
+				DatagramPacket packet = new DatagramPacket(sendData,
+						sendData.length, broadcast, PeykUser.getSourceUser()
+								.getPort());
+				datagramSocket.send(packet);
 
 			} catch (SocketException e) {
 				e.printStackTrace();
