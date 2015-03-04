@@ -20,14 +20,13 @@ import org.apache.log4j.Logger;
 
 public final class PeykUser implements Serializable {
 	private static final long serialVersionUID = 1L;
-	static Logger log = Logger.getLogger(PeykUser.class.getName());
+	private static Logger log = Logger.getLogger(PeykUser.class.getName());
 
 	private String name;
 	private String host;
 	private final int port = 8180;
-	private Set<PeykUser> friendsList = new CopyOnWriteArraySet<PeykUser>();
-
-	private static PeykUser sourceUser = null;
+	transient private Set<PeykUser> friendsList = new CopyOnWriteArraySet<PeykUser>();
+	transient private static PeykUser sourceUser = null;
 
 	public static PeykUser getSourceUser() {
 		if (sourceUser != null)
