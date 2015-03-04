@@ -55,12 +55,16 @@ public class PeykFrame extends JFrame {
 				if (e.getClickCount() == 2) {
 					int index = userJList.locationToIndex(e.getPoint());
 					ListModel<PeykUser> userListModel = userJList.getModel();
-					Object item = userListModel.getElementAt(index);
 
-					final PeykUser selectedUser = (PeykUser) item;
+					if (userListModel.getSize() != 0) {
 
-					userJList.ensureIndexIsVisible(index);
-					ChatFrame.getChatFrame(selectedUser);
+						Object item = userListModel.getElementAt(index);
+
+						final PeykUser selectedUser = (PeykUser) item;
+
+						userJList.ensureIndexIsVisible(index);
+						ChatFrame.getChatFrame(selectedUser);
+					}
 				}
 			}
 		});
