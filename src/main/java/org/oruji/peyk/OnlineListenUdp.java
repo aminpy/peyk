@@ -32,15 +32,15 @@ public class OnlineListenUdp implements Runnable {
 						buffer.length);
 
 				datagramSocket.receive(packet);
-				PeykUser peykUser = PeykUser.deserialize(packet.getData());
+				PeykUser destUser = PeykUser.deserialize(packet.getData());
 
-				if (peykUser == null) {
+				if (destUser == null) {
 					log.error("Listen UDP: deserialized peykUser is null !!!");
 
 				} else {
-					if (!peykUser.equals(sourceUser)) {
-						log.info("Received UDP from: " + peykUser);
-						tempUsers.add(peykUser);
+					if (!destUser.equals(sourceUser)) {
+						log.info("Received UDP from: " + destUser);
+						tempUsers.add(destUser);
 					}
 				}
 

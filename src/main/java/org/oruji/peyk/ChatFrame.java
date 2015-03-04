@@ -21,8 +21,11 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
+import org.apache.log4j.Logger;
+
 public class ChatFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
+	private Logger log = Logger.getLogger(ChatFrame.class.getName());
 
 	private JTextPane chatPanel = null;
 	private HTMLDocument doc = null;
@@ -120,7 +123,7 @@ public class ChatFrame extends JFrame {
 			text = TextFormatter.buildStr(text);
 			text = TextFormatter.emoticons(text);
 			kit.insertHTML(doc, doc.getLength(), text, 0, 0, null);
-			System.out.println(TextFormatter.emoticons(text));
+			log.info(text);
 
 		} catch (BadLocationException e) {
 			e.printStackTrace();

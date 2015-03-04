@@ -10,9 +10,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import org.apache.log4j.Logger;
 
 public class OnlineBroadCast implements Runnable {
-	Logger log = Logger.getLogger(OnlineBroadCast.class.getName());
+	private Logger log = Logger.getLogger(OnlineBroadCast.class.getName());
 
-	Set<PeykUser> tempUsers = new CopyOnWriteArraySet<PeykUser>();
+	private Set<PeykUser> tempUsers = new CopyOnWriteArraySet<PeykUser>();
 
 	public OnlineBroadCast(Set<PeykUser> tempUsers) {
 		this.tempUsers = tempUsers;
