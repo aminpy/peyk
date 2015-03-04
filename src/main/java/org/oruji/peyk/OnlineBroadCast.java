@@ -19,6 +19,7 @@ public class OnlineBroadCast implements Runnable {
 	}
 
 	public void run() {
+		PeykUser sourceUser = PeykUser.getSourceUser();
 		while (true) {
 			DatagramSocket datagramSocket;
 
@@ -26,32 +27,30 @@ public class OnlineBroadCast implements Runnable {
 				datagramSocket = new DatagramSocket();
 				datagramSocket.setBroadcast(true);
 
-				byte[] sendData = PeykUser.getSourceUser().serialize();
+				byte[] sendData = sourceUser.serialize();
 
 				InetAddress broadcast = PeykUser.getMyBroadcast();
 
-				log.info("broadcast: " + broadcast);
 				DatagramPacket packet = new DatagramPacket(sendData,
-						sendData.length, broadcast, PeykUser.getSourceUser()
-								.getPort());
+						sendData.length, broadcast, sourceUser.getPort());
 				datagramSocket.send(packet);
+				log.info("broadcast: " + broadcast);
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
+			sourceUser.getFriendsList().clear();
+			sourceUser.getFriendsList().addAll(tempUsers);
+			tempUsers.clear();
+
 			try {
-				PeykUser sourceUser = PeykUser.getSourceUser();
-				sourceUser.getFriendsList().clear();
-				sourceUser.getFriendsList().addAll(tempUsers);
-				tempUsers.clear();
 				Thread.sleep(3000);
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	public void start() {

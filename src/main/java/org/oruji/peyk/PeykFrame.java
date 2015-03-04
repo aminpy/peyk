@@ -74,12 +74,11 @@ public class PeykFrame extends JFrame {
 				String content = text.getText().trim();
 
 				if (content.equals("")) {
-					PeykUser.getSourceUser().setName(
-							System.getProperty("user.name"));
+					sourceUser.setName(System.getProperty("user.name"));
 					text.setText(System.getProperty("user.name"));
 
 				} else
-					PeykUser.getSourceUser().setName(text.getText());
+					sourceUser.setName(text.getText());
 
 				text.transferFocus();
 			}
@@ -102,7 +101,7 @@ public class PeykFrame extends JFrame {
 			public void actionPerformed(ActionEvent evt) {
 				userJList.setListData(sourceUser.getFriendsList().toArray(
 						new PeykUser[sourceUser.getFriendsList().size()]));
-				setTitle(TITLE + " - " + PeykUser.getSourceUser().getName());
+				setTitle(TITLE + " - " + sourceUser.getName());
 
 			}
 		};
