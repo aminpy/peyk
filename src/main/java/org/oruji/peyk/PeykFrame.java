@@ -20,6 +20,7 @@ public class PeykFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final String TITLE = "Peyk Messenger";
 
+	private PeykUser sourceUser = PeykUser.getSourceUser();
 	private static PeykFrame peykFrame = null;
 
 	public static PeykFrame getFrame() {
@@ -37,7 +38,6 @@ public class PeykFrame extends JFrame {
 			}
 		});
 
-		final PeykUser sourceUser = PeykUser.getSourceUser();
 		setTitle(TITLE + " - " + sourceUser.getName());
 
 		final JList<PeykUser> userJList = new JList<PeykUser>();
@@ -99,10 +99,11 @@ public class PeykFrame extends JFrame {
 
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+				System.out.println("peykframe: "
+						+ PeykUser.getSourceUser().getFriendsList());
 				userJList.setListData(sourceUser.getFriendsList().toArray(
 						new PeykUser[sourceUser.getFriendsList().size()]));
 				setTitle(TITLE + " - " + sourceUser.getName());
-
 			}
 		};
 

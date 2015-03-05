@@ -4,19 +4,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
 public class OnlineBroadCast implements Runnable {
 	private Logger log = Logger.getLogger(OnlineBroadCast.class.getName());
-
-	private Set<PeykUser> tempUsers = new CopyOnWriteArraySet<PeykUser>();
-
-	public OnlineBroadCast(Set<PeykUser> tempUsers) {
-		this.tempUsers = tempUsers;
-	}
 
 	public void run() {
 		PeykUser sourceUser = PeykUser.getSourceUser();
@@ -40,9 +33,12 @@ public class OnlineBroadCast implements Runnable {
 				e.printStackTrace();
 			}
 
-			sourceUser.getFriendsList().clear();
-			sourceUser.getFriendsList().addAll(tempUsers);
-			tempUsers.clear();
+			// remove old online users
+			for (PeykUser u : sourceUser.getFriendsList()) {
+				if ((new Date().getTime() - u.getReceiveDate().getTime()) > (60000 * 4)) {
+					sourceUser.getFriendsList().remove(u);
+				}
+			}
 
 			try {
 				Thread.sleep(3000);

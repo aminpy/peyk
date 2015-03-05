@@ -12,6 +12,7 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -25,6 +26,7 @@ public final class PeykUser implements Serializable {
 	private String name;
 	private String host;
 	private final int port = 8180;
+	transient private Date receiveDate;
 	transient private Set<PeykUser> friendsList = new CopyOnWriteArraySet<PeykUser>();
 	transient private static PeykUser sourceUser = null;
 
@@ -68,6 +70,14 @@ public final class PeykUser implements Serializable {
 
 	public void setFriendsList(Set<PeykUser> friendsList) {
 		this.friendsList = friendsList;
+	}
+
+	public Date getReceiveDate() {
+		return receiveDate;
+	}
+
+	public void setReceiveDate(Date receiveDate) {
+		this.receiveDate = receiveDate;
 	}
 
 	@Override

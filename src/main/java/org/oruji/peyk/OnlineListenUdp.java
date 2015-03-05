@@ -4,19 +4,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
 public class OnlineListenUdp implements Runnable {
 	Logger log = Logger.getLogger(OnlineListenUdp.class.getName());
-
-	private Set<PeykUser> tempUsers = new CopyOnWriteArraySet<PeykUser>();
-
-	public OnlineListenUdp(Set<PeykUser> tempUsers) {
-		this.tempUsers = tempUsers;
-	}
 
 	public void run() {
 		DatagramSocket datagramSocket = null;
@@ -24,7 +17,8 @@ public class OnlineListenUdp implements Runnable {
 
 		while (true) {
 			try {
-				datagramSocket = new DatagramSocket(sourceUser.getPort());
+				datagramSocket = new DatagramSocket(PeykUser.getSourceUser()
+						.getPort());
 				datagramSocket.setBroadcast(true);
 
 				byte[] buffer = new byte[15000];
@@ -32,15 +26,29 @@ public class OnlineListenUdp implements Runnable {
 						buffer.length);
 
 				datagramSocket.receive(packet);
-				PeykUser destUser = PeykUser.deserialize(packet.getData());
+				PeykUser receivedUser = PeykUser.deserialize(packet.getData());
 
-				if (destUser == null) {
+				if (receivedUser == null) {
 					log.error("Listen UDP: deserialized peykUser is null !!!");
 
 				} else {
-					if (!destUser.equals(sourceUser)) {
-						log.info("Received UDP from: " + destUser);
-						tempUsers.add(destUser);
+					if (!receivedUser.equals(sourceUser)) {
+						log.info("Received UDP from: " + receivedUser);
+
+						// add or replace new online user
+						receivedUser.setReceiveDate(new Date());
+
+						if (PeykUser.getSourceUser().getFriendsList()
+								.contains(receivedUser)) {
+							PeykUser.getSourceUser().getFriendsList()
+									.remove(receivedUser);
+							PeykUser.getSourceUser().getFriendsList()
+									.add(receivedUser);
+
+						} else {
+							PeykUser.getSourceUser().getFriendsList()
+									.add(receivedUser);
+						}
 					}
 				}
 
