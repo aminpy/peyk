@@ -8,33 +8,6 @@ import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 public class TextFormatter {
-
-	private final static Map<String, String> emoticonMap = new TreeMap<String, String>() {
-		private static final long serialVersionUID = 1L;
-
-		{
-			put("&gt;:D&lt;", "baghal");
-			put(":))", "laugh");
-			put(":((", "cry");
-			put(":)", "1");
-			put(":(", "2");
-			put(":D", "3");
-			put(":-h", "bye");
-			put("(:|", "khamyaze");
-			put("8-&gt;", "rolleyes");
-			put("B-)", "shades");
-			put(":\"&gt;", "shy");
-			put(":-\"", "soot");
-			put(":x", "love");
-			put(":o", "taajjob");
-			put(":-/", "confused");
-			put("x(", "angry");
-			put("I-)", "sleep");
-			put(":-?", "think");
-			put(":-p", "tongue");
-		}
-	};
-
 	private static Map<String, String> treeMap = new TreeMap<String, String>(
 			new Comparator<String>() {
 				@Override
@@ -71,8 +44,6 @@ public class TextFormatter {
 		treeMap.put(":-?", "think");
 		treeMap.put(":-p", "tongue");
 
-		// Iterator<Entry<String, String>> it =
-		// emoticonMap.entrySet().iterator();
 		Iterator<Entry<String, String>> it = treeMap.entrySet().iterator();
 
 		while (it.hasNext()) {
