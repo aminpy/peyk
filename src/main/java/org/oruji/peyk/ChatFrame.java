@@ -84,19 +84,21 @@ public class ChatFrame extends JFrame {
 
 		showButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PeykMessage peykMessage = new PeykMessage();
-				peykMessage.setSendDate(new Date());
-				peykMessage.setText(inputArea.getText());
-				peykMessage.setSender(PeykUser.getSourceUser());
-				peykMessage.setReceiver(destUser);
+				if (!inputArea.getText().trim().equals("")) {
+					PeykMessage peykMessage = new PeykMessage();
+					peykMessage.setSendDate(new Date());
+					peykMessage.setText(inputArea.getText());
+					peykMessage.setSender(PeykUser.getSourceUser());
+					peykMessage.setReceiver(destUser);
 
-				String text = peykMessage.sendFormat();
+					String text = peykMessage.sendFormat();
 
-				appendText(text);
+					appendText(text);
 
-				PeykMessage.sendMessage(peykMessage);
+					PeykMessage.sendMessage(peykMessage);
 
-				inputArea.setText("");
+					inputArea.setText("");
+				}
 			}
 		});
 
