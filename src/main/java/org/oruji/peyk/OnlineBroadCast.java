@@ -35,7 +35,7 @@ public class OnlineBroadCast implements Runnable {
 
 			// remove old online users
 			for (PeykUser u : sourceUser.getFriendsList()) {
-				if ((new Date().getTime() - u.getReceiveDate().getTime()) > (60000 * 4)) {
+				if ((new Date().getTime() - u.getReceiveDate().getTime()) > (4000)) {
 					sourceUser.getFriendsList().remove(u);
 				}
 			}
