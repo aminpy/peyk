@@ -43,6 +43,7 @@ public class TextFormatter {
 		treeMap.put("I-)", "sleep");
 		treeMap.put(":-?", "think");
 		treeMap.put(":-p", "tongue");
+		treeMap.put(":*", "kiss");
 
 		Iterator<Entry<String, String>> it = treeMap.entrySet().iterator();
 
