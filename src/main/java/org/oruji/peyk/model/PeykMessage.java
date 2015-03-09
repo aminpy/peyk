@@ -1,13 +1,9 @@
 package org.oruji.peyk.model;
 
-import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -108,55 +104,6 @@ public class PeykMessage implements Serializable {
 				e1.printStackTrace();
 			}
 		}
-	}
-
-	public static PeykMessage receiveMessage(int port) {
-		ServerSocket serverSocket = null;
-		Socket server = null;
-		ObjectInputStream in = null;
-		PeykMessage message = null;
-
-		try {
-			serverSocket = new ServerSocket(port);
-			log.info("before server accept <<<<<<<<<<<<<<<");
-			server = serverSocket.accept();
-			log.info("after  server accept >>>>>>>>>>>>>>>");
-
-			InputStream inputStream = server.getInputStream();
-
-			in = new ObjectInputStream(inputStream);
-			Object inputObj = in.readObject();
-
-			if (inputObj instanceof PeykMessage) {
-				message = (PeykMessage) inputObj;
-				message.setReceiveDate(new Date());
-			}
-
-		} catch (IOException e) {
-			if (e instanceof EOFException) {
-				log.error("EOF Exception occured !");
-			}
-
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-
-		} finally {
-			try {
-				if (serverSocket != null)
-					serverSocket.close();
-
-				if (server != null)
-					server.close();
-
-				if (in != null)
-					in.close();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return message;
 	}
 
 	@Override
