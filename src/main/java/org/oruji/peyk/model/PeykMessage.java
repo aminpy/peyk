@@ -1,5 +1,8 @@
 package org.oruji.peyk.model;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
@@ -73,15 +76,17 @@ public class PeykMessage implements Serializable {
 
 	public void sendMessage() {
 		Socket client = null;
-		OutputStream outToServer = null;
-		ObjectOutputStream out = null;
+		OutputStream outputStream = null;
+		ObjectOutputStream objectOutputStream = null;
 
 		try {
 			client = new Socket(this.getReceiver().getHost(), this
 					.getReceiver().getPort());
-			outToServer = client.getOutputStream();
-			out = new ObjectOutputStream(outToServer);
-			out.writeObject(this);
+
+			outputStream = client.getOutputStream();
+			objectOutputStream = new ObjectOutputStream(outputStream);
+
+			objectOutputStream.writeObject(this);
 
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
@@ -94,16 +99,111 @@ public class PeykMessage implements Serializable {
 				if (client != null)
 					client.close();
 
-				if (outToServer != null)
-					outToServer.close();
+				if (outputStream != null)
+					outputStream.close();
 
-				if (out != null)
-					out.close();
+				if (objectOutputStream != null)
+					objectOutputStream.close();
 
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 		}
+	}
+
+	public void sendFile() {
+		Socket client = null;
+		OutputStream outputStream = null;
+		ObjectOutputStream objectOutputStream = null;
+
+		FileInputStream fileInputStream = null;
+		DataInputStream dataInputStream = null;
+
+		try {
+			client = new Socket(this.getReceiver().getHost(), this
+					.getReceiver().getPort());
+
+			outputStream = client.getOutputStream();
+			objectOutputStream = new ObjectOutputStream(outputStream);
+
+			PeykFile peykFile = new PeykFile();
+			peykFile.setName("رزومه.pdf");
+
+			File file = new File(peykFile.getName());
+
+			if (file.isFile()) {
+				fileInputStream = new FileInputStream(file);
+				dataInputStream = new DataInputStream(fileInputStream);
+
+				long len = (int) file.length();
+				byte[] fileBytes = new byte[(int) len];
+				int read = 0;
+				int numRead = 0;
+
+				while (read < fileBytes.length
+						&& (numRead = dataInputStream.read(fileBytes, read,
+								fileBytes.length - read)) >= 0) {
+					read = read + numRead;
+				}
+
+				peykFile.setSize(len);
+				peykFile.setContent(fileBytes);
+
+				dataInputStream.close();
+				fileInputStream.close();
+
+			} else {
+				System.out.println("file does not exist !");
+			}
+
+			this.setAttachedFile(peykFile);
+
+			objectOutputStream.writeObject(this);
+
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				if (client != null)
+					client.close();
+
+				if (outputStream != null)
+					outputStream.close();
+
+				if (objectOutputStream != null)
+					objectOutputStream.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public String sendFormat() {
+		StringBuilder formatedText = new StringBuilder();
+		formatedText.append("me");
+		formatedText.append(" - ");
+		formatedText
+				.append(new SimpleDateFormat("HH:mm:ss: ").format(sendDate));
+		formatedText.append(text);
+
+		return formatedText.toString();
+	}
+
+	public String receiveFormat() {
+		StringBuilder formatedText = new StringBuilder();
+		formatedText.append(sender.getName());
+		formatedText.append(" - ");
+		formatedText.append(new SimpleDateFormat("HH:mm:ss")
+				.format(receiveDate));
+		formatedText.append(": ");
+		formatedText.append(text);
+
+		return formatedText.toString();
 	}
 
 	@Override
@@ -152,28 +252,5 @@ public class PeykMessage implements Serializable {
 			return false;
 
 		return true;
-	}
-
-	public String sendFormat() {
-		StringBuilder formatedText = new StringBuilder();
-		formatedText.append("me");
-		formatedText.append(" - ");
-		formatedText
-				.append(new SimpleDateFormat("HH:mm:ss: ").format(sendDate));
-		formatedText.append(text);
-
-		return formatedText.toString();
-	}
-
-	public String receiveFormat() {
-		StringBuilder formatedText = new StringBuilder();
-		formatedText.append(sender.getName());
-		formatedText.append(" - ");
-		formatedText.append(new SimpleDateFormat("HH:mm:ss")
-				.format(receiveDate));
-		formatedText.append(": ");
-		formatedText.append(text);
-
-		return formatedText.toString();
 	}
 }
