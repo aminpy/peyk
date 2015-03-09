@@ -97,7 +97,7 @@ public class ChatFrame extends JFrame {
 
 					appendText(text);
 
-					PeykMessage.sendMessage(peykMessage);
+					peykMessage.sendMessage();
 
 					inputArea.setText("");
 				}

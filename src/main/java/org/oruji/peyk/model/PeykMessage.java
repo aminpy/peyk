@@ -75,17 +75,17 @@ public class PeykMessage implements Serializable {
 		this.attachedFile = attachedFile;
 	}
 
-	public static void sendMessage(PeykMessage message) {
+	public void sendMessage() {
 		Socket client = null;
 		OutputStream outToServer = null;
 		ObjectOutputStream out = null;
 
 		try {
-			client = new Socket(message.getReceiver().getHost(), message
+			client = new Socket(this.getReceiver().getHost(), this
 					.getReceiver().getPort());
 			outToServer = client.getOutputStream();
 			out = new ObjectOutputStream(outToServer);
-			out.writeObject(message);
+			out.writeObject(this);
 
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
