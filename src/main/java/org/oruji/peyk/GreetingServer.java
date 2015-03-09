@@ -1,6 +1,8 @@
 package org.oruji.peyk;
 
 import org.apache.log4j.Logger;
+import org.oruji.peyk.model.PeykMessage;
+import org.oruji.peyk.model.PeykUser;
 
 public class GreetingServer implements Runnable {
 	Logger log = Logger.getLogger(GreetingServer.class.getName());

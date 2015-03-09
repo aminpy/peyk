@@ -22,6 +22,8 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import org.apache.log4j.Logger;
+import org.oruji.peyk.model.PeykMessage;
+import org.oruji.peyk.model.PeykUser;
 
 public class ChatFrame extends JFrame {
 	private static final long serialVersionUID = 1L;

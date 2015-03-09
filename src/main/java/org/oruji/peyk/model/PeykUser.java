@@ -1,4 +1,4 @@
-package org.oruji.peyk;
+package org.oruji.peyk.model;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

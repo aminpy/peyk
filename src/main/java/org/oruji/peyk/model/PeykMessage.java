@@ -1,4 +1,4 @@
-package org.oruji.peyk;
+package org.oruji.peyk.model;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -25,6 +25,7 @@ public class PeykMessage implements Serializable {
 	private Date sendDate;
 	private PeykUser sender;
 	private PeykUser receiver;
+	private PeykFile attachedFile;
 
 	public String getText() {
 		return text;
@@ -64,6 +65,14 @@ public class PeykMessage implements Serializable {
 
 	public void setReceiver(PeykUser receiver) {
 		this.receiver = receiver;
+	}
+
+	public PeykFile getAttachedFile() {
+		return attachedFile;
+	}
+
+	public void setAttachedFile(PeykFile attachedFile) {
+		this.attachedFile = attachedFile;
 	}
 
 	public static void sendMessage(PeykMessage message) {
