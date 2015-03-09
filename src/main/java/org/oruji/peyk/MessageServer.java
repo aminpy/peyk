@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 import org.oruji.peyk.model.PeykMessage;
 import org.oruji.peyk.model.PeykUser;
 
-public class GreetingServer implements Runnable {
-	Logger log = Logger.getLogger(GreetingServer.class.getName());
+public class MessageServer implements Runnable {
+	Logger log = Logger.getLogger(MessageServer.class.getName());
 
 	public void run() {
 		while (true) {

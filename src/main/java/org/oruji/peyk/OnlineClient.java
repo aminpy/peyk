@@ -9,8 +9,8 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.oruji.peyk.model.PeykUser;
 
-public class OnlineBroadCast implements Runnable {
-	private Logger log = Logger.getLogger(OnlineBroadCast.class.getName());
+public class OnlineClient implements Runnable {
+	private Logger log = Logger.getLogger(OnlineClient.class.getName());
 
 	public void run() {
 		PeykUser sourceUser = PeykUser.getSourceUser();

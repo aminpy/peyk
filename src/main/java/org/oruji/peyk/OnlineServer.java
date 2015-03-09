@@ -9,8 +9,8 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.oruji.peyk.model.PeykUser;
 
-public class OnlineListenUdp implements Runnable {
-	Logger log = Logger.getLogger(OnlineListenUdp.class.getName());
+public class OnlineServer implements Runnable {
+	Logger log = Logger.getLogger(OnlineServer.class.getName());
 
 	public void run() {
 		DatagramSocket datagramSocket = null;
