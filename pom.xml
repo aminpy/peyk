@@ -43,7 +43,7 @@
 
 					<archive>
 						<manifest>
-							<mainClass>org.oruji.peyk.Main</mainClass>
+							<mainClass>org.oruji.peyk.main.Main</mainClass>
 						</manifest>
 					</archive>
 

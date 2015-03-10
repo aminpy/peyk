@@ -49,7 +49,8 @@ public class MessageServer implements Runnable {
 				FileOutputStream fileOutputStream = null;
 
 				try {
-					String dirPath = "myfolder/";
+					String dirPath = fileChooser.getCurrentDirectory()
+							.toString() + "/";
 
 					String outputFile = dirPath
 							+ message.getAttachedFile().getName();
