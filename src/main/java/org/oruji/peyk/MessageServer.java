@@ -2,6 +2,7 @@ package org.oruji.peyk;
 
 import java.io.EOFException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +10,8 @@ import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
+
+import javax.swing.JFileChooser;
 
 import org.apache.log4j.Logger;
 import org.oruji.peyk.model.PeykMessage;
@@ -26,8 +29,60 @@ public class MessageServer implements Runnable {
 				continue;
 			}
 
-			if (message.getText() == null)
-				continue;
+			if (message.getText() == null) {
+
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setSelectedFile(new File(message.getAttachedFile()
+						.getName()));
+				int result = fileChooser.showSaveDialog(fileChooser);
+
+				if (result == JFileChooser.APPROVE_OPTION) {
+					log.info(fileChooser.getCurrentDirectory()
+							.getAbsolutePath());
+				}
+
+				if (result == JFileChooser.CANCEL_OPTION) {
+					log.info("You pressed cancel");
+				}
+
+				File destFile = null;
+				FileOutputStream fileOutputStream = null;
+
+				try {
+					String dirPath = "myfolder/";
+
+					String outputFile = dirPath
+							+ message.getAttachedFile().getName();
+
+					if (!new File(dirPath).exists()) {
+						new File(dirPath).mkdirs();
+					}
+
+					destFile = new File(outputFile);
+
+					fileOutputStream = new FileOutputStream(destFile);
+
+					fileOutputStream.write(message.getAttachedFile()
+							.getContent());
+
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+
+				} catch (IOException e) {
+					e.printStackTrace();
+
+				} finally {
+					try {
+						if (fileOutputStream != null) {
+							fileOutputStream.flush();
+							fileOutputStream.close();
+						}
+
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 
 			ChatFrame chatFrame = ChatFrame.getChatFrame(message.getSender());
 			chatFrame.appendText(message.receiveFormat());
@@ -46,9 +101,6 @@ public class MessageServer implements Runnable {
 		InputStream inputStream = null;
 		PeykMessage message = null;
 
-		File destFile = null;
-		FileOutputStream fileOutputStream = null;
-
 		try {
 			serverSocket = new ServerSocket(port);
 			log.info("before server accept <<<<<<<<<<<<<<<");
@@ -66,21 +118,6 @@ public class MessageServer implements Runnable {
 				message.setReceiveDate(new Date());
 			}
 
-			if (message.getText() == null) {
-				String dirPath = "myfolder/";
-
-				String outputFile = dirPath
-						+ message.getAttachedFile().getName();
-
-				if (!new File(dirPath).exists()) {
-					new File(dirPath).mkdirs();
-				}
-
-				destFile = new File(outputFile);
-				fileOutputStream = new FileOutputStream(destFile);
-				fileOutputStream.write(message.getAttachedFile().getContent());
-			}
-
 		} catch (IOException e) {
 			if (e instanceof EOFException) {
 				log.error("EOF Exception occured !");
@@ -91,11 +128,6 @@ public class MessageServer implements Runnable {
 
 		} finally {
 			try {
-				if (fileOutputStream != null) {
-					fileOutputStream.flush();
-					fileOutputStream.close();
-				}
-
 				if (serverSocket != null)
 					serverSocket.close();
 

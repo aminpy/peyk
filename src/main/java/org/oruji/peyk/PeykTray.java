@@ -13,8 +13,10 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-public final class PeykTray {
+import org.apache.log4j.Logger;
 
+public final class PeykTray {
+	private Logger log = Logger.getLogger(PeykTray.class.getName());
 	private static PeykTray peykTray = null;
 
 	private TrayIcon trayIcon = null;
@@ -30,7 +32,7 @@ public final class PeykTray {
 	private PeykTray() {
 		// Check the SystemTray is supported
 		if (!SystemTray.isSupported()) {
-			System.out.println("SystemTray is not supported");
+			log.error("SystemTray is not supported");
 
 			return;
 		}

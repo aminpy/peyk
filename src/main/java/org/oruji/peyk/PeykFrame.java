@@ -101,8 +101,6 @@ public class PeykFrame extends JFrame {
 
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				System.out.println("peykframe: "
-						+ PeykUser.getSourceUser().getFriendsList());
 				userJList.setListData(sourceUser.getFriendsList().toArray(
 						new PeykUser[sourceUser.getFriendsList().size()]));
 				setTitle(TITLE + " - " + sourceUser.getName());

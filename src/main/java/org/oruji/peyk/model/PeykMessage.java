@@ -148,7 +148,7 @@ public class PeykMessage implements Serializable {
 				attachedFile.setContent(fileBytes);
 
 			} else {
-				System.out.println("file does not exist !");
+				log.error("file does not exist !");
 			}
 
 			objectOutputStream.writeObject(this);
