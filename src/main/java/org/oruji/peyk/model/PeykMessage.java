@@ -126,7 +126,8 @@ public class PeykMessage implements Serializable {
 			outputStream = client.getOutputStream();
 			objectOutputStream = new ObjectOutputStream(outputStream);
 
-			File file = new File(this.getAttachedFile().getName());
+			File file = new File(this.getAttachedFile().getPath() + "/"
+					+ this.getAttachedFile().getName());
 
 			if (file.isFile()) {
 				fileInputStream = new FileInputStream(file);
