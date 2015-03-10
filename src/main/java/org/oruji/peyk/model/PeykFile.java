@@ -6,6 +6,7 @@ public class PeykFile implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String name;
+	private transient String path;
 	private long size;
 	private byte[] content;
 
@@ -15,6 +16,14 @@ public class PeykFile implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	public long getSize() {
@@ -31,5 +40,9 @@ public class PeykFile implements Serializable {
 
 	public void setContent(byte[] content) {
 		this.content = content;
+	}
+
+	public String getAbsolutePath() {
+		return this.path + "/" + this.name;
 	}
 }

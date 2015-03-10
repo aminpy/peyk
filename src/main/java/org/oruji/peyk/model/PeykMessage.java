@@ -126,10 +126,7 @@ public class PeykMessage implements Serializable {
 			outputStream = client.getOutputStream();
 			objectOutputStream = new ObjectOutputStream(outputStream);
 
-			PeykFile peykFile = new PeykFile();
-			peykFile.setName("رزومه.pdf");
-
-			File file = new File(peykFile.getName());
+			File file = new File(this.getAttachedFile().getName());
 
 			if (file.isFile()) {
 				fileInputStream = new FileInputStream(file);
@@ -146,17 +143,12 @@ public class PeykMessage implements Serializable {
 					read = read + numRead;
 				}
 
-				peykFile.setSize(len);
-				peykFile.setContent(fileBytes);
-
-				dataInputStream.close();
-				fileInputStream.close();
+				attachedFile.setSize(len);
+				attachedFile.setContent(fileBytes);
 
 			} else {
 				System.out.println("file does not exist !");
 			}
-
-			this.setAttachedFile(peykFile);
 
 			objectOutputStream.writeObject(this);
 
@@ -176,6 +168,12 @@ public class PeykMessage implements Serializable {
 
 				if (objectOutputStream != null)
 					objectOutputStream.close();
+
+				if (dataInputStream != null)
+					dataInputStream.close();
+
+				if (fileInputStream != null)
+					fileInputStream.close();
 
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -49,7 +49,7 @@ public class TextFormatter {
 
 		while (it.hasNext()) {
 			Entry<String, String> pairs = it.next();
-			String myPath = Main.class.getClassLoader()
+			String myPath = TextFormatter.class.getClassLoader()
 					.getResource("emoticons/" + pairs.getValue() + ".gif")
 					.toString();
 			text = text.replaceAll(Pattern.quote(pairs.getKey()), "<img src=\""

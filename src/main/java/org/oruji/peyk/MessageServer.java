@@ -1,6 +1,8 @@
 package org.oruji.peyk;
 
 import java.io.EOFException;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -20,12 +22,16 @@ public class MessageServer implements Runnable {
 			PeykMessage message = receiveMessage(PeykUser.getSourceUser()
 					.getPort());
 
-			if (message == null)
+			if (message == null) {
+				continue;
+			}
+
+			if (message.getText() == null)
 				continue;
 
 			ChatFrame chatFrame = ChatFrame.getChatFrame(message.getSender());
-
 			chatFrame.appendText(message.receiveFormat());
+
 		}
 	}
 
@@ -36,8 +42,12 @@ public class MessageServer implements Runnable {
 	private PeykMessage receiveMessage(int port) {
 		ServerSocket serverSocket = null;
 		Socket server = null;
-		ObjectInputStream in = null;
+		ObjectInputStream objectInputStream = null;
+		InputStream inputStream = null;
 		PeykMessage message = null;
+
+		File destFile = null;
+		FileOutputStream fileOutputStream = null;
 
 		try {
 			serverSocket = new ServerSocket(port);
@@ -45,14 +55,30 @@ public class MessageServer implements Runnable {
 			server = serverSocket.accept();
 			log.info("after  server accept >>>>>>>>>>>>>>>");
 
-			InputStream inputStream = server.getInputStream();
+			inputStream = server.getInputStream();
 
-			in = new ObjectInputStream(inputStream);
-			Object inputObj = in.readObject();
+			objectInputStream = new ObjectInputStream(inputStream);
+
+			Object inputObj = objectInputStream.readObject();
 
 			if (inputObj instanceof PeykMessage) {
 				message = (PeykMessage) inputObj;
 				message.setReceiveDate(new Date());
+			}
+
+			if (message.getText() == null) {
+				String dirPath = "myfolder/";
+
+				String outputFile = dirPath
+						+ message.getAttachedFile().getName();
+
+				if (!new File(dirPath).exists()) {
+					new File(dirPath).mkdirs();
+				}
+
+				destFile = new File(outputFile);
+				fileOutputStream = new FileOutputStream(destFile);
+				fileOutputStream.write(message.getAttachedFile().getContent());
 			}
 
 		} catch (IOException e) {
@@ -65,14 +91,22 @@ public class MessageServer implements Runnable {
 
 		} finally {
 			try {
+				if (fileOutputStream != null) {
+					fileOutputStream.flush();
+					fileOutputStream.close();
+				}
+
 				if (serverSocket != null)
 					serverSocket.close();
 
 				if (server != null)
 					server.close();
 
-				if (in != null)
-					in.close();
+				if (objectInputStream != null)
+					objectInputStream.close();
+
+				if (inputStream != null)
+					inputStream.close();
 
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -23,6 +23,7 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 import org.apache.log4j.Logger;
+import org.oruji.peyk.model.PeykFile;
 import org.oruji.peyk.model.PeykMessage;
 import org.oruji.peyk.model.PeykUser;
 
@@ -90,12 +91,28 @@ public class ChatFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser fileChooser = new JFileChooser();
-
 				int result = fileChooser.showOpenDialog(fileChooser);
 
 				if (result == JFileChooser.APPROVE_OPTION) {
+
+					PeykMessage peykMessage = new PeykMessage();
+					peykMessage.setSendDate(new Date());
+					peykMessage.setText(null);
+					peykMessage.setSender(PeykUser.getSourceUser());
+					peykMessage.setReceiver(destUser);
+
+					PeykFile peykFile = new PeykFile();
+					peykFile.setName(fileChooser.getSelectedFile().getName());
+					peykFile.setPath(fileChooser.getCurrentDirectory()
+							.getAbsolutePath());
+
+					peykMessage.setAttachedFile(peykFile);
+
+					peykMessage.sendFile();
+
 					log.info(fileChooser.getSelectedFile().getName());
 					log.info(fileChooser.getCurrentDirectory().toString());
+					log.info(fileChooser.getSelectedFile().getAbsolutePath());
 				}
 
 				if (result == JFileChooser.CANCEL_OPTION) {
