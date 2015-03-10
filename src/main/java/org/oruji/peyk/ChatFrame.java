@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRootPane;
@@ -82,9 +83,32 @@ public class ChatFrame extends JFrame {
 		scroll.setPreferredSize(CHAT_SIZE);
 		scroll.setMaximumSize(CHAT_SIZE);
 
+		JButton sendFileButton = new JButton("Send File");
+
+		sendFileButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser fileChooser = new JFileChooser();
+
+				int result = fileChooser.showOpenDialog(fileChooser);
+
+				if (result == JFileChooser.APPROVE_OPTION) {
+					log.info(fileChooser.getSelectedFile().getName());
+					log.info(fileChooser.getCurrentDirectory().toString());
+				}
+
+				if (result == JFileChooser.CANCEL_OPTION) {
+					log.info("You pressed cancel");
+				}
+			}
+		});
+
 		JButton showButton = new JButton("Send");
 
 		showButton.addActionListener(new ActionListener() {
+
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!inputArea.getText().trim().equals("")) {
 					PeykMessage peykMessage = new PeykMessage();
@@ -109,6 +133,7 @@ public class ChatFrame extends JFrame {
 		panel.add(scroll);
 		panel.add(inputArea);
 		panel.add(showButton);
+		panel.add(sendFileButton);
 
 		JRootPane rootPane = getRootPane();
 		rootPane.setDefaultButton(showButton);
@@ -124,6 +149,7 @@ public class ChatFrame extends JFrame {
 
 			// auto scrolling
 			chatPanel.setCaretPosition(chatPanel.getDocument().getLength());
+
 			text = TextFormatter.buildStr(text);
 			text = TextFormatter.emoticons(text);
 			kit.insertHTML(doc, doc.getLength(), text, 0, 0, null);
